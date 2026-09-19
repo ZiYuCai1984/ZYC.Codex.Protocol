@@ -13,7 +13,7 @@ internal class Program
 
     private static string VersionPropsFile => Path.Combine(ProjectRootFolder, "_version.props");
 
-    private static string ProjectRootFolder => ProjectTools.GetSlnFolderPath()!;
+    private static string ProjectRootFolder => ProjectTools.GetSlnxFolderPath()!;
 
     private static string ProtocolProjectFolder => Path.Combine(ProjectRootFolder, "ZYC.Codex.Protocol");
 
@@ -46,6 +46,7 @@ internal class Program
 
         var folder = "json-schema";
 
+#if PUSH_NUGET
         var result = await CommandTools.ExecuteCommandAsync(
             $"npx --yes --package=@openai/codex@latest codex app-server generate-json-schema --out ./{folder}");
         if (result != 0)
@@ -54,6 +55,7 @@ internal class Program
                 $"Failed to install or run Codex CLI to generate JSON schema (exit code {result}). " +
                 "Ensure Node.js and npm are available on PATH and the npm registry is reachable.");
         }
+#endif
 
         var schemaFile = Path.Combine(IOTools.CurrentDirectory, folder, "codex_app_server_protocol.schemas.json");
         var schema = await SchemaLoader.LoadAsync(schemaFile);

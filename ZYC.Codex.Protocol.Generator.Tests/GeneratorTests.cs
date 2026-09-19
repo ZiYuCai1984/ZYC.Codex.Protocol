@@ -9,7 +9,7 @@ namespace ZYC.Codex.Protocol.Generator.Tests;
 
 public class GeneratorTests
 {
-    private static string SolutionPath => IOTools.GetSlnFolderPath()
+    private static string SolutionPath => IOTools.GetSlnxFolderPath()
         ?? throw new InvalidOperationException("Cannot locate the solution directory for generator tests.");
 
     private static string GeneratorProjectPath => Path.Combine(SolutionPath, "ZYC.Codex.Protocol.Generator");
