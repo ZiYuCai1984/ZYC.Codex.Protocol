@@ -1,0 +1,38 @@
+{
+  "definitions": {
+    "FixturePayload": {
+      "type": "object",
+      "description": "A <payload> & its fields.\nSecond line.",
+      "properties": {
+        "name": { "type": "string" },
+        "requiredNull": { "type": ["integer", "null"], "format": "int32" },
+        "optionalCount": { "type": "integer", "format": "int64" },
+        "enabled": { "type": "boolean" },
+        "id": { "type": "string", "format": "uuid" },
+        "created": { "type": "string", "format": "date-time" },
+        "ratio": { "type": "number", "format": "float" },
+        "labels": { "type": "array", "items": { "$ref": "#/definitions/FixtureEnum" } },
+        "map": { "type": "object", "additionalProperties": { "$ref": "#/definitions/FixtureChild" } },
+        "child": { "anyOf": [{ "$ref": "#/definitions/FixtureChild" }, { "type": "null" }] },
+        "otherChild": { "oneOf": [{ "type": "null" }, { "$ref": "#/definitions/FixtureChild" }] },
+        "any": true,
+        "unknowns": { "type": "object", "additionalProperties": true }
+      },
+      "required": ["name", "requiredNull", "enabled", "labels"]
+    },
+    "FixtureChild": { "type": "object", "properties": { "value": { "type": "string" } }, "required": ["value"] },
+    "FixtureEnum": { "type": "string", "enum": ["thread/start", "foo-bar", "snake_case"] },
+    "FixtureNaming": { "type": "object", "properties": {
+      "type": { "type": "string" }, "event": { "type": "string" }, "params": { "type": "string" },
+      "namespace": { "type": "string" }, "123": { "type": "integer" },
+      "foo-bar": { "type": "string" }, "foo_bar": { "type": "string" }, "FooBar": { "type": "string" },
+      "fixtureNaming": { "type": "string" }, "Clone": { "type": "boolean" }
+    } },
+    "FixtureCollisionEnum": { "type": "string", "enum": ["a-b", "a_b", "A-b", "123", "value__"] },
+    "FixtureBase": { "type": "object", "properties": { "base": { "type": "string" } }, "required": ["base"] },
+    "FixtureAllOf": { "allOf": [ { "$ref": "#/definitions/FixtureBase" },
+      { "type": "object", "properties": { "count": { "type": ["integer", "null"] } }, "required": ["count"] }
+    ] },
+    "FixtureRecursive": { "type": "object", "properties": { "next": { "$ref": "#/definitions/FixtureRecursive" } } }
+  }
+}

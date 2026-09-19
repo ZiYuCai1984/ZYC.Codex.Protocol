@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+		<Using Include="Xunit" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\ZYC.Codex.Protocol.Generator\ZYC.Codex.Protocol.Generator.csproj" />
+		<ProjectReference Include="..\ZYC.Codex.Protocol\ZYC.Codex.Protocol.csproj" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ZYC.CoreToolkit" />
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+
+</Project>

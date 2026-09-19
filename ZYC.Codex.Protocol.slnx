@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".github/workflows/push-nuget.yml" />
+    <File Path=".gitignore" />
+    <File Path="AGENTS.md" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+    <File Path="README.md" />
+    <File Path="_version.props" />
+  </Folder>
+  <Project Path="ZYC.Codex.Protocol.Generator.Tests/ZYC.Codex.Protocol.Generator.Tests.csproj" />
+  <Project Path="ZYC.Codex.Protocol.Generator/ZYC.Codex.Protocol.Generator.csproj" />
+  <Project Path="ZYC.Codex.Protocol/ZYC.Codex.Protocol.csproj" />
+</Solution>
