@@ -11,6 +11,8 @@ internal class Program
 {
     private static string BuildVersion => ProtocolProductInfo.Version;
 
+    private static string Description => ProtocolProductInfo.Description;
+
     private static string VersionPropsFile => Path.Combine(ProjectRootFolder, "_version.props");
 
     private static string ProjectRootFolder => ProjectTools.GetSlnxFolderPath()!;
@@ -31,6 +33,7 @@ internal class Program
             "<Project>\r\n" +
             "  <PropertyGroup>\r\n" +
             $"    <Version>{BuildVersion}</Version>\r\n" +
+            $"    <Description>{Description}</Description>\r\n" +
             "  </PropertyGroup>\r\n" +
             "</Project>";
 
