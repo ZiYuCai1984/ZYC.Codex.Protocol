@@ -1,5 +1,6 @@
 ﻿name: push-nuget
 on:
+  push:
   workflow_dispatch:
   
 jobs:
@@ -11,6 +12,17 @@ jobs:
       id-token: write
     steps:
     - uses: actions/checkout@v4
+
+    # - name: Set up Node.js
+    #   uses: actions/setup-node@v4
+    #   with:
+    #     node-version: '22'
+
+    # - name: Set up .NET
+    #   uses: actions/setup-dotnet@v4
+    #   with:
+    #     dotnet-version: '10.0.x'
     
-    - run: |
+    - name: Generate and publish NuGet package
+      run: |
         dotnet run --project ZYC.Codex.Protocol.Generator/ZYC.Codex.Protocol.Generator.csproj -c release --property:DefineConstants="PUSH_NUGET"

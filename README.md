@@ -174,7 +174,7 @@ Console.WriteLine(integerId == new RequestIdInteger(1L)); // True
 
 ## Regenerating Protocol Code
 
-Working on the generator and test projects requires the .NET 10 SDK. The complete generation workflow also requires a `codex` command available on `PATH` that supports `app-server generate-json-schema`.
+Working on the generator and test projects requires the .NET 10 SDK. The complete generation workflow also requires Node.js and npm (including `npx`) on `PATH`, plus access to the npm registry. The generator uses `npx --yes --package=@openai/codex@latest` to automatically fetch and run the latest [Codex CLI](https://developers.openai.com/codex/cli/) from the npm cache. A global Codex CLI installation is not required.
 
 Run from the repository root:
 
@@ -200,6 +200,10 @@ new CSharpGenerator().Write(types, "ZYC.Codex.Protocol");
 These relative paths assume the repository root is the working directory. `Write` replaces the top-level `*.g.cs` files in the target directory. Make protocol mapping changes in the generator and regenerate the affected output.
 
 Checked-in schema snapshots are stored in [ZYC.Codex.Protocol.Generator/json-schema](ZYC.Codex.Protocol.Generator/json-schema/). The generated types reflect the schema used during generation. After updating the Codex CLI, review protocol changes and synchronize the schema snapshots used for generation and testing. Unsupported schema structures produce errors that include their location and original content.
+
+## CI Publishing
+
+The [push-nuget workflow](.github/workflows/push-nuget.yml) runs on every push and can also be started manually. It sets up Node.js 22 and the .NET 10 SDK on Windows, then runs the generator with `PUSH_NUGET` enabled to generate, build, pack, and publish the NuGet package using the configured trusted publishing policy.
 
 ## Tests
 

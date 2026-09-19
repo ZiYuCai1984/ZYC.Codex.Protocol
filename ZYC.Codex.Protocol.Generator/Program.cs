@@ -46,10 +46,13 @@ internal class Program
 
         var folder = "json-schema";
 
-        var result = await CommandTools.ExecuteCommandAsync($"codex app-server generate-json-schema --out ./{folder}");
+        var result = await CommandTools.ExecuteCommandAsync(
+            $"npx --yes --package=@openai/codex@latest codex app-server generate-json-schema --out ./{folder}");
         if (result != 0)
         {
-            throw new InvalidOperationException("Failed to generate JSON schema.");
+            throw new InvalidOperationException(
+                $"Failed to install or run Codex CLI to generate JSON schema (exit code {result}). " +
+                "Ensure Node.js and npm are available on PATH and the npm registry is reachable.");
         }
 
         var schemaFile = Path.Combine(IOTools.CurrentDirectory, folder, "codex_app_server_protocol.schemas.json");
