@@ -1,5 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+	<PropertyGroup>
+		<OutputPath>$(MSBuildThisFileDirectory)../_bin_test/</OutputPath>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<Using Include="Xunit" />
 	</ItemGroup>

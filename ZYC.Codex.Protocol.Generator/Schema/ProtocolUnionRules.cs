@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using NJsonSchema;
 using ZYC.Codex.Protocol.Generator.Model;
 
@@ -55,6 +55,15 @@ internal class ProtocolUnionRules
         {
             cases.AddRange(branches.Select(b => (b, b.Type == JsonObjectType.String ? "String" : "Array",
                 b.Type == JsonObjectType.String ? JsonValueKind.String : JsonValueKind.Array,
+                Array.Empty<PropertyMatch>())));
+        }
+        else if (owner == "ThreadItemsListCursor" && branches.Count == 2 &&
+                 branches.Count(b => b.Type == JsonObjectType.String) == 1 &&
+                 branches.Any(b => Name(b) == "ThreadItemsListAnchor" && b.OneOf.Count > 0 &&
+                                   b.OneOf.All(a => a.ActualSchema.Type == JsonObjectType.Object)))
+        {
+            cases.AddRange(branches.Select(b => (b, b.Type == JsonObjectType.String ? "String" : "Anchor",
+                b.Type == JsonObjectType.String ? JsonValueKind.String : JsonValueKind.Object,
                 Array.Empty<PropertyMatch>())));
         }
         else if (owner == "ResourceContent" && branches.Count == 2 &&

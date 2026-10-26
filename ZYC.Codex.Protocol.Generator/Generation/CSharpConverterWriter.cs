@@ -1,4 +1,4 @@
-using ZYC.Codex.Protocol.Generator.Model;
+﻿using ZYC.Codex.Protocol.Generator.Model;
 
 namespace ZYC.Codex.Protocol.Generator.Generation;
 
@@ -111,7 +111,7 @@ internal static class CSharpConverterWriter
                 else
                 {
                     var index = 0;
-                    foreach (var m in model.Members)
+                    foreach (var m in model.Members.OrderBy(m => m.IsFallback))
                     {
                         var conditions = new List<string> { $"root.ValueKind == JsonValueKind.{m.Kind}" };
                         if (m.Literal is { } literal)
@@ -144,7 +144,36 @@ internal static class CSharpConverterWriter
                         }
 
                         w.Line($"if ({string.Join(" && ", conditions)})");
-                        w.Line($"    return {Read(model, m)};");
+                        if (!m.IsFallback && m.Literal == null &&
+                            model.Members.Any(fallback => fallback.IsFallback && fallback.Kind == m.Kind))
+                        {
+                            w.Line("{");
+                            using (w.Indent())
+                            {
+                                w.Line("try");
+                                w.Line("{");
+                                using (w.Indent())
+                                {
+                                    w.Line($"return {Read(model, m)};");
+                                }
+
+                                w.Line("}");
+                                w.Line("catch (JsonException)");
+                                w.Line("{");
+                                using (w.Indent())
+                                {
+                                    w.Line("// The schema's open anyOf branch also accepts this value.");
+                                }
+
+                                w.Line("}");
+                            }
+
+                            w.Line("}");
+                        }
+                        else
+                        {
+                            w.Line($"    return {Read(model, m)};");
+                        }
                     }
 
                     w.Line($"throw new JsonException({Q("Unknown " + model.Name + " wire shape or value.")});");
@@ -186,6 +215,11 @@ internal static class CSharpConverterWriter
 
     private static string Read(UnionTypeModel model, UnionMemberModel member)
     {
+        if (member.IsFallback && member.Payload?.Kind == TypeKind.Any)
+        {
+            return CSharpUnionWriter.CreateMember(model, member, "root.Clone()");
+        }
+
         return member.Literal != null
             ? $"new {member.TypeName}()"
             : member.Payload is { } type
@@ -195,7 +229,13 @@ internal static class CSharpConverterWriter
 
     private static void Write(CodeWriter w, UnionMemberModel member)
     {
-        if (member.Literal is { } literal)
+        if (member.IsFallback && member.Payload?.Kind == TypeKind.Any)
+        {
+            w.Line($"if (concrete.Value.ValueKind != JsonValueKind.{member.Kind})");
+            w.Line($"    throw new JsonException({Q("Expected " + member.Kind + " for " + member.TypeName + ".")});");
+            w.Line("concrete.Value.WriteTo(writer);");
+        }
+        else if (member.Literal is { } literal)
         {
             w.Line($"writer.WriteStringValue({Q(literal)});");
         }

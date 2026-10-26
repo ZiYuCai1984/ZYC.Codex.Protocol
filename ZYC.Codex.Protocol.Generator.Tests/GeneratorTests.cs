@@ -9,7 +9,7 @@ namespace ZYC.Codex.Protocol.Generator.Tests;
 
 public class GeneratorTests
 {
-    private static string SolutionPath => IOTools.GetSlnFolderPath()
+    private static string SolutionPath => IOTools.GetSlnxFolderPath()
         ?? throw new InvalidOperationException("Cannot locate the solution directory for generator tests.");
 
     private static string GeneratorProjectPath => Path.Combine(SolutionPath, "ZYC.Codex.Protocol.Generator");
@@ -69,6 +69,72 @@ public class GeneratorTests
             Assert.Equal(content,
                 await File.ReadAllTextAsync(Path.Combine(GeneratedFixturesPath, file)));
         }
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task ThreadItemsListCursorSupportsStringAndAnchorAsync(bool groupedDefinitions)
+    {
+        // Match the string | tagged-anchor shape exported by Codex 0.164.0.
+        var json = JObject.Parse(await File.ReadAllTextAsync(
+            Path.Combine(TestProjectPath, "Fixtures", "thread-items-list.json")));
+        if (groupedDefinitions)
+        {
+            json["definitions"] = new JObject { ["v2"] = json["definitions"]!.DeepClone() };
+            json = JObject.Parse(json.ToString().Replace("#/definitions/", "#/definitions/v2/"));
+        }
+
+        var models = await Analyze(json.ToString());
+        var cursor = Assert.IsType<UnionTypeModel>(models.Single(m => m.Name == "ThreadItemsListCursor"));
+        Assert.Null(cursor.DiscriminatorProperty);
+        Assert.Collection(cursor.Members,
+            anchor =>
+            {
+                Assert.Equal(System.Text.Json.JsonValueKind.Object, anchor.Kind);
+                Assert.Equal(new TypeReference(TypeKind.Named, "ThreadItemsListAnchor"), anchor.Payload);
+            },
+            text =>
+            {
+                Assert.Equal(System.Text.Json.JsonValueKind.String, text.Kind);
+                Assert.Equal(new TypeReference(TypeKind.Primitive, "string"), text.Payload);
+            });
+
+        var anchorModel = Assert.IsType<UnionTypeModel>(models.Single(m => m.Name == "ThreadItemsListAnchor"));
+        Assert.Equal("type", anchorModel.DiscriminatorProperty);
+        Assert.Equal("item", Assert.Single(anchorModel.Members).DiscriminatorValue);
+        var parameters = Assert.IsType<ObjectTypeModel>(models.Single(m => m.Name == "ThreadItemsListParams"));
+        var property = Assert.Single(parameters.Properties, p => p.JsonName == "cursor");
+        Assert.False(property.Required);
+        Assert.Equal(new TypeReference(TypeKind.Named, "ThreadItemsListCursor").AsNullable(), property.Type);
+
+        var files = new CSharpGenerator().Generate(models);
+        Assert.Contains("implicit operator ThreadItemsListCursor(string value)", files["ThreadItemsListCursor.g.cs"]);
+        Assert.Contains("public ThreadItemsListAnchor Value", files["ThreadItemsListCursorAnchor.g.cs"]);
+        var converter = files["ThreadItemsListCursorJsonConverter.g.cs"];
+        Assert.Contains("root.ValueKind == JsonValueKind.String", converter);
+        Assert.Contains("root.ValueKind == JsonValueKind.Object", converter);
+        Assert.Contains("root.Deserialize<ThreadItemsListAnchor>(options)", converter);
+        Assert.Contains("JsonSerializer.Serialize(writer, concrete.Value, options);", converter);
+
+        var definitions = groupedDefinitions ? json["definitions"]!["v2"]! : json["definitions"]!;
+        var alternatives = (JArray)definitions["ThreadItemsListCursor"]!["anyOf"]!;
+        definitions["ThreadItemsListCursor"]!["anyOf"] = new JArray(alternatives.Reverse());
+        var reordered = new CSharpGenerator().Generate(await Analyze(json.ToString()));
+        Assert.Equal(files.ToArray(), reordered.ToArray());
+    }
+
+    [Theory]
+    [InlineData("{\"type\":\"integer\"}")]
+    [InlineData("{\"type\":\"object\"}")]
+    [InlineData("{\"type\":\"boolean\"}")]
+    public async Task ThreadItemsListCursorRejectsUnsupportedAlternativesAsync(string alternative)
+    {
+        var json = JObject.Parse(await File.ReadAllTextAsync(
+            Path.Combine(TestProjectPath, "Fixtures", "thread-items-list.json")));
+        json["definitions"]!["ThreadItemsListCursor"]!["anyOf"]![1] = JToken.Parse(alternative);
+        var exception = await Assert.ThrowsAsync<NotSupportedException>(() => Analyze(json.ToString()));
+        Assert.Contains("#/definitions/ThreadItemsListCursor", exception.Message);
     }
 
     [Theory]

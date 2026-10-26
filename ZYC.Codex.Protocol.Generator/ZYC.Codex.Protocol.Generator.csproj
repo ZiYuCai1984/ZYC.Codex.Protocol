@@ -2,7 +2,13 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
+		<OutputPath>$(MSBuildThisFileDirectory)../_bin_build/</OutputPath>
 	</PropertyGroup>
+
+  <PropertyGroup>
+    <!--!WARNING For resolve the issue of hot reload false detections during debug--> 
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+  </PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="NJsonSchema" />

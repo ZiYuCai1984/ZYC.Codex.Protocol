@@ -1,0 +1,38 @@
+﻿name: update-codex-protocol
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Daily at 00:17 UTC / 09:17 Asia/Tokyo.
+    - cron: '17 0 * * *'
+
+concurrency:
+  group: update-codex-protocol
+  cancel-in-progress: false
+
+jobs:
+  update-codex-protocol:
+    if: github.event.repository.fork == false && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: windows-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      id-token: write
+    env:
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+      # Preserve the LF snapshots used by generator consistency tests during checkout.
+      GIT_CONFIG_COUNT: '1'
+      GIT_CONFIG_KEY_0: core.autocrlf
+      GIT_CONFIG_VALUE_0: 'false'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Update protocol and publish
+        run: dotnet run --project ZYC.Codex.Protocol.Generator/ZYC.Codex.Protocol.Generator.csproj -c Release -- --update-and-publish

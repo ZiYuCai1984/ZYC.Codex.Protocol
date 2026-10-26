@@ -1,4 +1,21 @@
-﻿# ZYC.Codex.Protocol
+﻿<h1 align="center">ZYC.Codex.Protocol</h1>
+
+<p align="center">
+  <a href="https://www.nuget.org/packages/ZYC.Codex.Protocol">
+    <img src="https://img.shields.io/nuget/vpre/ZYC.Codex.Protocol?logo=nuget" alt="NuGet Version (including prereleases)" />
+  </a>
+  <a href="https://www.nuget.org/packages/ZYC.Codex.Protocol">
+    <img src="https://img.shields.io/nuget/dt/ZYC.Codex.Protocol?logo=nuget&amp;label=Downloads" alt="NuGet Downloads" />
+  </a>
+  <img src="https://img.shields.io/badge/.NET_Standard-2.0-512BD4?logo=dotnet&amp;logoColor=white" alt=".NET Standard 2.0" />
+  <a href="LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-green" alt="MIT License" />
+  </a>
+  <a href="https://github.com/ZiYuCai1984/ZYC.Codex.Protocol/actions/workflows/update-codex-protocol.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/ZiYuCai1984/ZYC.Codex.Protocol/update-codex-protocol.yml?label=Protocol%20update&amp;logo=github" alt="Daily protocol update workflow" />
+  </a>
+</p>
+
 
 .NET data contracts for the Codex app-server protocol, including requests, responses, notifications, union types, and `System.Text.Json` converters for constructing and parsing strongly typed protocol messages.
 
@@ -9,10 +26,20 @@ The library handles message modeling and JSON serialization. The consuming appli
 Install [ZYC.Codex.Protocol from NuGet](https://www.nuget.org/packages/ZYC.Codex.Protocol) in your application project:
 
 ```shell
-dotnet add package ZYC.Codex.Protocol
+dotnet add package ZYC.Codex.Protocol --prerelease
 ```
 
 Import the `ZYC.Codex.Protocol` namespace to use the protocol types. JSON converters are applied through attributes on types and properties; no manual converter registration is required.
+
+## Protocol Version
+
+<!-- codex-version:start -->
+The existing schema snapshot predates version tracking. The first successful automated update will record the exact Codex CLI/schema and NuGet package versions here.
+<!-- codex-version:end -->
+
+Automated packages follow the Generator's `ProductInfo.Version` expression. The current `1.0.0-{CodexVersion}` template produces versions such as `1.0.0-0.164.0`. The Codex CLI version identifies the schema exported by that CLI, as described in the [app-server documentation](https://developers.openai.com/codex/app-server). `ProductInfo.Version` exposes the full package version and `ProductInfo.CodexVersion` exposes the pinned upstream version (empty for the original untracked snapshot).
+
+The suffix is a NuGet prerelease identifier, so enable prerelease packages when installing or updating, or select the exact version from the table. The library base is maintained manually in the Generator's `ProductInfo.Version`. Build metadata such as `+codex.0.114.0` cannot distinguish package versions because [NuGet removes it during version normalization](https://learn.microsoft.com/en-us/nuget/concepts/package-versioning#normalized-version-numbers).
 
 ## Creating Requests
 
@@ -174,7 +201,7 @@ Console.WriteLine(integerId == new RequestIdInteger(1L)); // True
 
 ## Regenerating Protocol Code
 
-Working on the generator and test projects requires the .NET 10 SDK. The complete generation workflow also requires a `codex` command available on `PATH` that supports `app-server generate-json-schema`.
+Working on the generator and test projects requires the .NET 10 SDK. The default local workflow also requires Node.js/npm to export the latest Codex schema. `--generate-only` regenerates from the checked-in schema without Node.js or a Codex CLI installation.
 
 Run from the repository root:
 
@@ -182,7 +209,40 @@ Run from the repository root:
 dotnet run --project ZYC.Codex.Protocol.Generator/ZYC.Codex.Protocol.Generator.csproj -c Release
 ```
 
-The entry point updates `_version.props`, invokes the Codex CLI to export the schema, generates protocol types and converters, and synchronizes `ProductInfo.cs`. It then builds and packs the protocol project, writing artifacts to `_bin/`. The package version comes from `ProductInfo.Version` in the generator project.
+Starting the Generator without arguments, including from the debugger, resolves the latest stable Codex version, exports its schema, generates code and metadata, updates README, and builds and packs locally. This always runs the generation flow, even if that package has already been published. It does not query NuGet, commit, push, or publish. Each stage logs its progress; build and pack output is forwarded to the console, and errors propagate to the debugger.
+
+The Generator's `ProductInfo.cs` remains the manually maintained source of the library version and description. Its `CodexVersion` property contains the `__CODEX_VERSION__` placeholder and is never changed by the running Generator. When copying the file to the protocol project, a plain string replacement substitutes the runtime `codexVersion` for that placeholder. The `Version` expression is copied unchanged and evaluates using the substituted `CodexVersion`. The package version is obtained by the same placeholder replacement on the Generator's `ProductInfo.Version`; that version and the original description are written to `_version.props`, which remains an ignored, derived file. Version checks read the protocol project's generated `ProductInfo.cs` from disk.
+
+`Directory.Build.props` supplies the default output directory `_bin/`. The Generator and test projects override `OutputPath` in their own `.csproj` files:
+
+| Directory | Contents |
+| --- | --- |
+| `_bin/` | Protocol build output and NuGet packages (global default) |
+| `_bin_build/` | Generator executable and dependencies |
+| `_bin_test/` | Test output and copies of referenced assemblies |
+
+The release flow builds the protocol before running tests. Tests reuse the already-built project references to avoid rebuilding and overwriting the running Generator. Build, test, and pack commands do not override `OutputPath`.
+
+The Generator owns version checks, schema updates, Git operations, tests, packaging, and publication. Select a branch of the workflow with arguments after `--`:
+
+| Arguments | Behavior |
+| --- | --- |
+| None | Export the latest stable Codex schema, generate code and metadata, update README, build, and pack locally |
+| `--generate-only` | Regenerate from the checked-in schema and its recorded Codex version without building or packing; the original untracked snapshot requires an initial no-argument run or `--update` to establish its version |
+| `--check-update` | Check npm/NuGet and report whether an update or publication is needed; do not change source files |
+| `--update [CodexVersion]` | Export the specified stable Codex version (or npm latest), update version metadata and README, and regenerate code |
+| `--publish` | Check, update if needed, build, pack, and publish; do not commit or push source |
+| `--update-and-publish` | Check, update, build, test, commit, pack, push source, and publish as needed |
+
+For example, to update the schema explicitly (replace the example version with the desired stable version):
+
+```shell
+dotnet run --project ZYC.Codex.Protocol.Generator/ZYC.Codex.Protocol.Generator.csproj -c Release -- --update 0.114.0
+```
+
+Schema export requires Windows, Node.js/npm on `PATH`, and access to the npm registry. It exports the exact `@openai/codex` version into an empty staging directory and generates against that schema before replacing the checked-in snapshot. Unsupported schema structures stop generation before replacing existing outputs or version metadata. Successful generation updates the protocol project's `ProductInfo.cs` and the version table above. The Generator's own `ProductInfo.cs` stays unchanged. A global Codex CLI installation is not required. `dotnet run` still builds the Generator itself in every mode.
+
+The legacy `PUSH_NUGET` compilation symbol maps the no-argument invocation to `--publish`, preserving the original `push-nuget.yml` entry point. Explicit command-line arguments take precedence over that symbol.
 
 To generate code from an existing schema without running the complete workflow, use the following in maintenance code that references the generator project:
 

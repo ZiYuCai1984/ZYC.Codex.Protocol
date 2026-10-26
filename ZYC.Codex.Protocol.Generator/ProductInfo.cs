@@ -1,14 +1,16 @@
 ﻿#pragma warning disable IDE0130
 namespace ZYC.Codex.Protocol;
 
-public class ProductInfo
+public static class ProductInfo
 {
     public static string Copyright =>
         $"© 2015 - {DateTime.Now.Year} {Author}. All rights reserved.";
 
-    public static string Description => $"Codex app-server protocol data contracts for .NET. (Powered by {Author})";
+    public static string Description => $"Strongly typed .NET data contracts and JSON serialization support for the Codex app-server protocol. (Powered by {Author})";
 
     public static string Author => "tomoko";
 
-    public static string Version => "0.9.0";
+    public static string Version => $"1.0.0-{CodexVersion}";
+
+    public static string CodexVersion => "__CODEX_VERSION__";
 }

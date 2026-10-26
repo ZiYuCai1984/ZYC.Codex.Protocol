@@ -1,0 +1,41 @@
+﻿{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ThreadItemsListParams",
+  "type": "object",
+  "properties": {
+    "cursor": {
+      "anyOf": [
+        { "$ref": "#/definitions/ThreadItemsListCursor" },
+        { "type": "null" }
+      ]
+    },
+    "threadId": { "type": "string" }
+  },
+  "required": ["threadId"],
+  "definitions": {
+    "ThreadItemsListAnchor": {
+      "oneOf": [
+        {
+          "title": "ItemThreadItemsListAnchor",
+          "type": "object",
+          "properties": {
+            "itemId": { "type": "string" },
+            "type": {
+              "title": "ItemThreadItemsListAnchorType",
+              "type": "string",
+              "enum": ["item"]
+            }
+          },
+          "required": ["itemId", "type"]
+        }
+      ]
+    },
+    "ThreadItemsListCursor": {
+      "anyOf": [
+        { "type": "string" },
+        { "$ref": "#/definitions/ThreadItemsListAnchor" }
+      ],
+      "description": "Starting position for an item-history page."
+    }
+  }
+}

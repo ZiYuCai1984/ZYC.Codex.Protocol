@@ -1,0 +1,30 @@
+﻿{
+  "title": "CodexErrorInfo",
+  "anyOf": [
+    {
+      "enum": ["badRequest", "other", "tooManyDenials"],
+      "type": "string"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "httpConnectionFailed": {
+          "properties": {
+            "httpStatusCode": {
+              "format": "uint16",
+              "minimum": 0.0,
+              "type": ["integer", "null"]
+            }
+          },
+          "type": "object"
+        }
+      },
+      "required": ["httpConnectionFailed"],
+      "title": "HttpConnectionFailedCodexErrorInfo",
+      "type": "object"
+    },
+    {
+      "type": ["string", "object"]
+    }
+  ]
+}

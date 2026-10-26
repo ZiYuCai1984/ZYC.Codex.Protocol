@@ -3,7 +3,6 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<LangVersion>10.0</LangVersion>
-		<Description>Strongly typed .NET data contracts and JSON serialization support for the Codex app-server protocol.</Description>
 	</PropertyGroup>
 
 	<ItemGroup>

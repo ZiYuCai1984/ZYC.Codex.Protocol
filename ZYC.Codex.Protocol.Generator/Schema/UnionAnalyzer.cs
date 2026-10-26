@@ -1,5 +1,6 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using NJsonSchema;
+using Newtonsoft.Json.Linq;
 using ZYC.Codex.Protocol.Generator.Model;
 
 namespace ZYC.Codex.Protocol.Generator.Schema;
@@ -87,14 +88,18 @@ internal class UnionAnalyzer
 
         // Rust's externally tagged enums use a string for a unit variant or a closed,
         // single-property object for a payload variant. These occur in ReviewDecision etc.
-        if (schema.Properties.Count == 0 && actual.All(b => StringValues(b) != null ||
+        var fallbacks = schema.AnyOf.Count > 0 && Analyzer.Document.Source(schema).Owner == "CodexErrorInfo"
+            ? actual.Where(IsErrorInfoFallback).ToList()
+            : [];
+        var external = fallbacks.Count == 1 ? actual.Where(b => !ReferenceEquals(b, fallbacks[0])).ToList() : actual;
+        if (schema.Properties.Count == 0 && external.Count > 0 && external.All(b => StringValues(b) != null ||
                                                             (IsObject(b) && b.Properties.Count == 1 &&
                                                              !b.AllowAdditionalProperties &&
                                                              b.RequiredProperties.SequenceEqual(b.Properties.Keys))))
         {
             return Analyzer.Declare(schema, name =>
             {
-                var cases = actual.SelectMany(b => StringValues(b) is { } values
+                var cases = external.SelectMany(b => StringValues(b) is { } values
                         ? values.Select(v => (Branch: b, Tag: v, Literal: true))
                         : [(Branch: b, Tag: b.Properties.Keys.Single(), Literal: false)])
                     .OrderBy(x => x.Tag, StringComparer.Ordinal).ToList();
@@ -117,11 +122,27 @@ internal class UnionAnalyzer
                         c.Literal ? [] : [new PropertyMatch([c.Tag])], Literal: c.Literal ? c.Tag : null,
                         Description: c.Branch.Description);
                 }).ToList();
+                if (fallbacks.Count == 1)
+                {
+                    // Keep explicit cases first; the open anyOf branch covers unknown wire values.
+                    members.Add(new UnionMemberModel(Analyzer.Allocate(name + "_UnknownString"), "UnknownString",
+                        JsonValueKind.String, [], new TypeReference(TypeKind.Primitive, "string")) { IsFallback = true });
+                    members.Add(new UnionMemberModel(Analyzer.Allocate(name + "_UnknownObject"), "UnknownObject",
+                        JsonValueKind.Object, [], new TypeReference(TypeKind.Any)) { IsFallback = true });
+                }
+
                 return new UnionTypeModel(name, null, members, schema.Description);
             });
         }
 
         return new ProtocolUnionRules(Analyzer).Resolve(schema, actual);
+    }
+
+    private bool IsErrorInfoFallback(JsonSchema schema)
+    {
+        return schema.Type == (JsonObjectType.String | JsonObjectType.Object) &&
+               Analyzer.Document.Source(schema).Json is JObject raw &&
+               raw.Properties().All(p => p.Name is "type" or "title" or "description");
     }
 
     private static bool IsObject(JsonSchema schema)

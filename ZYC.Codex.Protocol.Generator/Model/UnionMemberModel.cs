@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace ZYC.Codex.Protocol.Generator.Model;
 
@@ -12,4 +12,7 @@ public record UnionMemberModel(
     IReadOnlyList<PropertyMatch> Tests,
     TypeReference? Payload = null,
     string? Literal = null,
-    string? Description = null);
+    string? Description = null)
+{
+    public bool IsFallback { get; init; }
+}
