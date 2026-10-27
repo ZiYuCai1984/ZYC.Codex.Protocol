@@ -8,7 +8,7 @@ namespace ZYC.Codex.Protocol;
 public class ReviewStartParams
 {
     /// <summary>
-    ///     Where to run the review: inline (default) on the current thread or detached on a new thread (returned in `reviewThreadId`).
+    ///     Where to run the review: inline (default) on the current thread or detached on a new thread (returned in `reviewThreadId`). Detached delivery is deprecated and emits `deprecationNotice`. Use `thread/start` followed by an inline review for a separate review thread.
     /// </summary>
     [JsonPropertyName("delivery")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

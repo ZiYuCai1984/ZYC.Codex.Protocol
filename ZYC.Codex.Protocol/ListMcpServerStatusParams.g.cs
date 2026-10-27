@@ -28,6 +28,13 @@ public class ListMcpServerStatusParams
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<uint?> Limit { get; set; }
 
+    /// <summary>
+    ///     Limit discovery to one server. With a thread ID, reuse that thread's MCP connection.
+    /// </summary>
+    [JsonPropertyName("serverName")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> ServerName { get; set; }
+
     [JsonPropertyName("threadId")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> ThreadId { get; set; }

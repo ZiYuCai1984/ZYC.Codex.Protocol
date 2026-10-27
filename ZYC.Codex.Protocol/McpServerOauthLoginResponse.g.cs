@@ -12,4 +12,11 @@ public class McpServerOauthLoginResponse
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public string AuthorizationUrl { get; set; } = default!;
 
+    /// <summary>
+    ///     Identifies this login attempt across the response and completion notification. Older servers omit this field; current servers always return it.
+    /// </summary>
+    [JsonPropertyName("loginId")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> LoginId { get; set; }
+
 }

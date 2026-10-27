@@ -8,11 +8,11 @@ namespace ZYC.Codex.Protocol;
 public class ThreadItemsListParams
 {
     /// <summary>
-    ///     Opaque cursor to pass to the next call to continue after the last item.
+    ///     Opaque continuation cursor or an exclusive item anchor in the requested visible turn. An item anchor requires a non-empty `turnId`; ascending (the default) returns items after it, and descending returns items before it. Continue with the returned string cursor.
     /// </summary>
     [JsonPropertyName("cursor")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public Optional<string?> Cursor { get; set; }
+    public Optional<ThreadItemsListCursor?> Cursor { get; set; }
 
     /// <summary>
     ///     Optional item page size.

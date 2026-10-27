@@ -19,6 +19,10 @@ public class FunctionCallResponseItem : ResponseItem
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public string CallId { get; set; } = default!;
 
+    [JsonPropertyName("encrypted_content")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> EncryptedContent { get; set; }
+
     [JsonPropertyName("encrypted_function_args")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<List<string>?> EncryptedFunctionArgs { get; set; }
@@ -39,6 +43,10 @@ public class FunctionCallResponseItem : ResponseItem
     [JsonPropertyName("namespace")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> Namespace { get; set; }
+
+    [JsonPropertyName("status")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> Status { get; set; }
 
     [JsonPropertyName("type")]
     [JsonInclude]

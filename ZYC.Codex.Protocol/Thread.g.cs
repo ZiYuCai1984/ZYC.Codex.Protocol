@@ -106,6 +106,13 @@ public class Thread
     public Optional<string?> Name { get; set; }
 
     /// <summary>
+    ///     Originator recorded when the thread was created, independent of its current client or executor. Null when the recorded originator is unavailable.
+    /// </summary>
+    [JsonPropertyName("originator")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> Originator { get; set; }
+
+    /// <summary>
     ///     The ID of the parent thread. This will only be set if this thread is a subagent.
     /// </summary>
     [JsonPropertyName("parentThreadId")]
@@ -195,7 +202,7 @@ public class Thread
     public Optional<string?> ThreadSource { get; set; }
 
     /// <summary>
-    ///     Only populated on `thread/resume`, `thread/rollback`, `thread/fork`, and `thread/read` (when `includeTurns` is true) responses. For all other responses and notifications returning a Thread, the turns field will be an empty list.
+    ///     Only populated on `thread/resume`, `thread/fork`, and `thread/read` (when `includeTurns` is true) responses. For all other responses and notifications returning a Thread, the turns field will be an empty list.
     /// </summary>
     [JsonPropertyName("turns")]
     [JsonRequired]

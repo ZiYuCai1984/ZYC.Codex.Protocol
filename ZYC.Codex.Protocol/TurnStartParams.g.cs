@@ -35,6 +35,13 @@ public class TurnStartParams
     public Optional<string?> Cwd { get; set; }
 
     /// <summary>
+    ///     Replace this thread's disabled plugin IDs. Omitted/null preserves the list; [] clears it.
+    /// </summary>
+    [JsonPropertyName("disabledPluginIds")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<List<string>?> DisabledPluginIds { get; set; }
+
+    /// <summary>
     ///     Override the reasoning effort for this turn and subsequent turns.
     /// </summary>
     [JsonPropertyName("effort")]
@@ -61,11 +68,29 @@ public class TurnStartParams
     public Optional<JsonElement> OutputSchema { get; set; }
 
     /// <summary>
-    ///     Override the personality for this turn and subsequent turns.
+    ///     ID of the turn that caused this new turn to start.
+    ///     
+    ///     Set this when starting work on behalf of another turn, such as delegated work in a different thread. Leave unset for work started directly by the user. Ignored when this request adds input to an active turn.
+    /// </summary>
+    [JsonPropertyName("parentTurnId")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> ParentTurnId { get; set; }
+
+    /// <summary>
+    ///     @deprecated `friendly` and `pragmatic` no longer select a style. Changing this does not rewrite the thread's existing instructions.
     /// </summary>
     [JsonPropertyName("personality")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<Personality?> Personality { get; set; }
+
+    /// <summary>
+    ///     ID of the first turn in the chain of work that led to this new turn.
+    ///     
+    ///     When setting `parentTurnId`, set this to the parent turn's `rootTurnId` when known. This keeps descendant work attributed to the original turn. If omitted, the new turn becomes its own root. Ignored when this request adds input to an active turn.
+    /// </summary>
+    [JsonPropertyName("rootTurnId")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> RootTurnId { get; set; }
 
     /// <summary>
     ///     Override the sandbox policy for this turn and subsequent turns.

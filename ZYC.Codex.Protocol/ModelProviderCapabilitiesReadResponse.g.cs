@@ -12,11 +12,6 @@ public class ModelProviderCapabilitiesReadResponse
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public bool ImageGeneration { get; set; } = default!;
 
-    [JsonPropertyName("namespaceTools")]
-    [JsonRequired]
-    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public bool NamespaceTools { get; set; } = default!;
-
     [JsonPropertyName("webSearch")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]

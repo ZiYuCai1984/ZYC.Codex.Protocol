@@ -11,6 +11,13 @@ public class ThreadGoalSetParams
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> Objective { get; set; }
 
+    /// <summary>
+    ///     Missing provenance does not supply user authorization.
+    /// </summary>
+    [JsonPropertyName("origin")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<ThreadGoalMutationOrigin?> Origin { get; set; }
+
     [JsonPropertyName("status")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<ThreadGoalStatus?> Status { get; set; }

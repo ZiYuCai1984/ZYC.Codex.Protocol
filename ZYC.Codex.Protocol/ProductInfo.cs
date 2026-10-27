@@ -1,7 +1,7 @@
 ﻿#pragma warning disable IDE0130
 namespace ZYC.Codex.Protocol;
 
-public class ProductInfo
+public static class ProductInfo
 {
     public static string Copyright =>
         $"© 2015 - {DateTime.Now.Year} {Author}. All rights reserved.";
@@ -10,8 +10,7 @@ public class ProductInfo
 
     public static string Author => "tomoko";
 
-    public static string Version => "1.0.0";
+    public static string Version => $"1.0.0-{CodexVersion}";
 
-    // Empty until the first version-pinned schema export; the existing snapshot's version is unknown.
-    public static string CodexVersion => "";
+    public static string CodexVersion => "0.164.0";
 }

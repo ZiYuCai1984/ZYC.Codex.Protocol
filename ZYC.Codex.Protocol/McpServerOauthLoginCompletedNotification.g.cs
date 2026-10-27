@@ -11,6 +11,13 @@ public class McpServerOauthLoginCompletedNotification
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> Error { get; set; }
 
+    /// <summary>
+    ///     Identifies the explicit login attempt. Older servers omit this field.
+    /// </summary>
+    [JsonPropertyName("loginId")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> LoginId { get; set; }
+
     [JsonPropertyName("name")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]

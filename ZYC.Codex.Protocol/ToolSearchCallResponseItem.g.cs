@@ -17,6 +17,10 @@ public class ToolSearchCallResponseItem : ResponseItem
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> CallId { get; set; }
 
+    [JsonPropertyName("encrypted_content")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> EncryptedContent { get; set; }
+
     [JsonPropertyName("execution")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]

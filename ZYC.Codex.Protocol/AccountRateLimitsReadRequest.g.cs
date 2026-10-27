@@ -31,6 +31,6 @@ public class AccountRateLimitsReadRequest : ClientRequest
 
     [JsonPropertyName("params")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public Optional<ProtocolNull?> Params { get; set; }
+    public Optional<GetAccountRateLimitsParams?> Params { get; set; }
 
 }

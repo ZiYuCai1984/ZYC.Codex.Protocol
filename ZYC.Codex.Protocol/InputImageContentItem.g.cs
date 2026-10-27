@@ -12,11 +12,6 @@ public class InputImageContentItem : ContentItem
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<ImageDetail?> Detail { get; set; }
 
-    [JsonPropertyName("image_url")]
-    [JsonRequired]
-    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public string ImageUrl { get; set; } = default!;
-
     [JsonPropertyName("type")]
     [JsonInclude]
     [JsonRequired]

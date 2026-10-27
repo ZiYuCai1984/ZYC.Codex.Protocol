@@ -13,12 +13,14 @@ public class MessagePhaseJsonConverter : JsonConverter<MessagePhase>
     {
         "commentary" => MessagePhase.Commentary,
         "final_answer" => MessagePhase.FinalAnswer,
+        "partial_answer" => MessagePhase.PartialAnswer,
         _ => throw new JsonException("Unknown MessagePhase value: " + value)
     };
     private static string Format(MessagePhase value) => value switch
     {
         MessagePhase.Commentary => "commentary",
         MessagePhase.FinalAnswer => "final_answer",
+        MessagePhase.PartialAnswer => "partial_answer",
         _ => throw new JsonException("Unknown MessagePhase value: " + value)
     };
     public override MessagePhase Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>

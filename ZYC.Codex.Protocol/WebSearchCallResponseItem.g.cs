@@ -12,6 +12,10 @@ public class WebSearchCallResponseItem : ResponseItem
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<ResponsesApiWebSearchAction?> Action { get; set; }
 
+    [JsonPropertyName("encrypted_content")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> EncryptedContent { get; set; }
+
     [JsonPropertyName("id")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> Id { get; set; }

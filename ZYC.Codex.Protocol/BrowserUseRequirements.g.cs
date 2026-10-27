@@ -16,6 +16,10 @@ public class BrowserUseRequirements
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<bool?> AllowHistoryAccess { get; set; }
 
+    [JsonPropertyName("allowWebmcp")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<bool?> AllowWebmcp { get; set; }
+
     [JsonPropertyName("defaultOriginPolicy")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<BrowserUseOriginPolicy?> DefaultOriginPolicy { get; set; }
@@ -23,6 +27,10 @@ public class BrowserUseRequirements
     [JsonPropertyName("disableAutoReview")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<bool?> DisableAutoReview { get; set; }
+
+    [JsonPropertyName("extension")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<BrowserUseExtensionRequirements?> Extension { get; set; }
 
     [JsonPropertyName("origins")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

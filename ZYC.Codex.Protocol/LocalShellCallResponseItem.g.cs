@@ -20,6 +20,10 @@ public class LocalShellCallResponseItem : ResponseItem
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> CallId { get; set; }
 
+    [JsonPropertyName("encrypted_content")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> EncryptedContent { get; set; }
+
     /// <summary>
     ///     Legacy id field retained for compatibility with older payloads.
     /// </summary>

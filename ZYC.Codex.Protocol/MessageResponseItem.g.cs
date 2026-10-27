@@ -14,6 +14,10 @@ public class MessageResponseItem : ResponseItem
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public List<ContentItem> Content { get; set; } = default!;
 
+    [JsonPropertyName("encrypted_content")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> EncryptedContent { get; set; }
+
     [JsonPropertyName("id")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> Id { get; set; }
@@ -30,6 +34,10 @@ public class MessageResponseItem : ResponseItem
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public string Role { get; set; } = default!;
+
+    [JsonPropertyName("status")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> Status { get; set; }
 
     [JsonPropertyName("type")]
     [JsonInclude]

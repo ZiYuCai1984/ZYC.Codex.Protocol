@@ -30,6 +30,13 @@ public class ThreadListParams
     public Optional<ThreadListCwdFilter?> Cwd { get; set; }
 
     /// <summary>
+    ///     Thread IDs to exclude before applying the result limit. Up to 100 entries; invalid IDs or a larger list are rejected, never truncated. Send the same exclusions on each page. Omitted, null, or empty means no exclusions.
+    /// </summary>
+    [JsonPropertyName("excludedThreadIds")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<List<string>?> ExcludedThreadIds { get; set; }
+
+    /// <summary>
     ///     Optional page size; defaults to a reasonable server-side value.
     /// </summary>
     [JsonPropertyName("limit")]
@@ -42,6 +49,13 @@ public class ThreadListParams
     [JsonPropertyName("modelProviders")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<List<string>?> ModelProviders { get; set; }
+
+    /// <summary>
+    ///     Optional originator allowlist, matching any supplied value exactly. Supported by hosted backends only; the local app-server rejects a nonempty list. Omitted or empty lists leave originators unrestricted.
+    /// </summary>
+    [JsonPropertyName("originators")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<List<string>?> Originators { get; set; }
 
     /// <summary>
     ///     Optional substring filter for the extracted thread title.

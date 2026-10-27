@@ -23,7 +23,7 @@ public class Turn
     public Optional<long?> DurationMs { get; set; }
 
     /// <summary>
-    ///     Only populated when the Turn's status is failed.
+    ///     Error associated with a failed or interrupted turn.
     /// </summary>
     [JsonPropertyName("error")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
@@ -51,6 +51,13 @@ public class Turn
     [JsonPropertyName("itemsView")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<TurnItemsView> ItemsView { get; set; }
+
+    /// <summary>
+    ///     ID of the first turn in the chain of work that led to this turn. Pass this as `rootTurnId` when starting work on behalf of this turn. May be null in older history or a `review/start` response.
+    /// </summary>
+    [JsonPropertyName("rootTurnId")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> RootTurnId { get; set; }
 
     /// <summary>
     ///     Unix timestamp (in seconds) when the turn started.

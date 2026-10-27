@@ -5,6 +5,9 @@ using System.Text.Json.Serialization;
 
 namespace ZYC.Codex.Protocol;
 
+/// <summary>
+///     Deprecated: `friendly` and `pragmatic` no longer select a style.
+/// </summary>
 [JsonConverter(typeof(PersonalityJsonConverter))]
 public enum Personality
 {

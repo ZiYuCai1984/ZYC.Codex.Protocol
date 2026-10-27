@@ -17,9 +17,11 @@ public class ResponseItemJsonConverter : JsonConverter<ResponseItem>
             throw new JsonException("Missing or invalid ResponseItem type.");
         return discriminator.GetString() switch
         {
+            "additional_tools" => root.Deserialize<AdditionalToolsResponseItem>(options) ?? throw new JsonException("Expected AdditionalToolsResponseItem."),
             "agent_message" => root.Deserialize<AgentMessageResponseItem>(options) ?? throw new JsonException("Expected AgentMessageResponseItem."),
             "compaction" => root.Deserialize<CompactionResponseItem>(options) ?? throw new JsonException("Expected CompactionResponseItem."),
             "compaction_trigger" => root.Deserialize<CompactionTriggerResponseItem>(options) ?? throw new JsonException("Expected CompactionTriggerResponseItem."),
+            "configuration_update" => root.Deserialize<ConfigurationUpdateResponseItem>(options) ?? throw new JsonException("Expected ConfigurationUpdateResponseItem."),
             "context_compaction" => root.Deserialize<ContextCompactionResponseItem>(options) ?? throw new JsonException("Expected ContextCompactionResponseItem."),
             "custom_tool_call" => root.Deserialize<CustomToolCallResponseItem>(options) ?? throw new JsonException("Expected CustomToolCallResponseItem."),
             "custom_tool_call_output" => root.Deserialize<CustomToolCallOutputResponseItem>(options) ?? throw new JsonException("Expected CustomToolCallOutputResponseItem."),
@@ -41,6 +43,9 @@ public class ResponseItemJsonConverter : JsonConverter<ResponseItem>
     {
         switch (value)
         {
+            case AdditionalToolsResponseItem concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
             case AgentMessageResponseItem concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
@@ -48,6 +53,9 @@ public class ResponseItemJsonConverter : JsonConverter<ResponseItem>
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
             case CompactionTriggerResponseItem concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
+            case ConfigurationUpdateResponseItem concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
             case ContextCompactionResponseItem concrete:

@@ -17,6 +17,9 @@ public class ClientRequestJsonConverter : JsonConverter<ClientRequest>
             throw new JsonException("Missing or invalid ClientRequest method.");
         return discriminator.GetString() switch
         {
+            "account/gatewayOAuth/cancel" => root.Deserialize<AccountGatewayOAuthCancelRequest>(options) ?? throw new JsonException("Expected AccountGatewayOAuthCancelRequest."),
+            "account/gatewayOAuth/login" => root.Deserialize<AccountGatewayOAuthLoginRequest>(options) ?? throw new JsonException("Expected AccountGatewayOAuthLoginRequest."),
+            "account/gatewayOAuth/read" => root.Deserialize<AccountGatewayOAuthReadRequest>(options) ?? throw new JsonException("Expected AccountGatewayOAuthReadRequest."),
             "account/login/cancel" => root.Deserialize<AccountLoginCancelRequest>(options) ?? throw new JsonException("Expected AccountLoginCancelRequest."),
             "account/login/start" => root.Deserialize<AccountLoginStartRequest>(options) ?? throw new JsonException("Expected AccountLoginStartRequest."),
             "account/logout" => root.Deserialize<AccountLogoutRequest>(options) ?? throw new JsonException("Expected AccountLogoutRequest."),
@@ -44,6 +47,7 @@ public class ClientRequestJsonConverter : JsonConverter<ClientRequest>
             "externalAgentConfig/import" => root.Deserialize<ExternalAgentConfigImportRequest>(options) ?? throw new JsonException("Expected ExternalAgentConfigImportRequest."),
             "externalAgentConfig/import/readHistories" => root.Deserialize<ExternalAgentConfigImportReadHistoriesRequest>(options) ?? throw new JsonException("Expected ExternalAgentConfigImportReadHistoriesRequest."),
             "externalAgentConfig/import/recordHistory" => root.Deserialize<ExternalAgentConfigImportRecordHistoryRequest>(options) ?? throw new JsonException("Expected ExternalAgentConfigImportRecordHistoryRequest."),
+            "feedback/save" => root.Deserialize<FeedbackSaveRequest>(options) ?? throw new JsonException("Expected FeedbackSaveRequest."),
             "feedback/upload" => root.Deserialize<FeedbackUploadRequest>(options) ?? throw new JsonException("Expected FeedbackUploadRequest."),
             "fs/copy" => root.Deserialize<FsCopyRequest>(options) ?? throw new JsonException("Expected FsCopyRequest."),
             "fs/createDirectory" => root.Deserialize<FsCreateDirectoryRequest>(options) ?? throw new JsonException("Expected FsCreateDirectoryRequest."),
@@ -85,6 +89,10 @@ public class ClientRequestJsonConverter : JsonConverter<ClientRequest>
             "skills/list" => root.Deserialize<SkillsListRequest>(options) ?? throw new JsonException("Expected SkillsListRequest."),
             "thread/approveGuardianDeniedAction" => root.Deserialize<ThreadApproveGuardianDeniedActionRequest>(options) ?? throw new JsonException("Expected ThreadApproveGuardianDeniedActionRequest."),
             "thread/archive" => root.Deserialize<ThreadArchiveRequest>(options) ?? throw new JsonException("Expected ThreadArchiveRequest."),
+            "thread/attachment/add" => root.Deserialize<ThreadAttachmentAddRequest>(options) ?? throw new JsonException("Expected ThreadAttachmentAddRequest."),
+            "thread/attachment/list" => root.Deserialize<ThreadAttachmentListRequest>(options) ?? throw new JsonException("Expected ThreadAttachmentListRequest."),
+            "thread/attachment/remove" => root.Deserialize<ThreadAttachmentRemoveRequest>(options) ?? throw new JsonException("Expected ThreadAttachmentRemoveRequest."),
+            "thread/attachmentOwner/list" => root.Deserialize<ThreadAttachmentOwnerListRequest>(options) ?? throw new JsonException("Expected ThreadAttachmentOwnerListRequest."),
             "thread/compact/start" => root.Deserialize<ThreadCompactStartRequest>(options) ?? throw new JsonException("Expected ThreadCompactStartRequest."),
             "thread/delete" => root.Deserialize<ThreadDeleteRequest>(options) ?? throw new JsonException("Expected ThreadDeleteRequest."),
             "thread/fork" => root.Deserialize<ThreadForkRequest>(options) ?? throw new JsonException("Expected ThreadForkRequest."),
@@ -100,7 +108,6 @@ public class ClientRequestJsonConverter : JsonConverter<ClientRequest>
             "thread/read" => root.Deserialize<ThreadReadRequest>(options) ?? throw new JsonException("Expected ThreadReadRequest."),
             "thread/resume" => root.Deserialize<ThreadResumeRequest>(options) ?? throw new JsonException("Expected ThreadResumeRequest."),
             "thread/revert" => root.Deserialize<ThreadRevertRequest>(options) ?? throw new JsonException("Expected ThreadRevertRequest."),
-            "thread/rollback" => root.Deserialize<ThreadRollbackRequest>(options) ?? throw new JsonException("Expected ThreadRollbackRequest."),
             "thread/section/move" => root.Deserialize<ThreadSectionMoveRequest>(options) ?? throw new JsonException("Expected ThreadSectionMoveRequest."),
             "thread/shellCommand" => root.Deserialize<ThreadShellCommandRequest>(options) ?? throw new JsonException("Expected ThreadShellCommandRequest."),
             "thread/start" => root.Deserialize<ThreadStartRequest>(options) ?? throw new JsonException("Expected ThreadStartRequest."),
@@ -124,6 +131,15 @@ public class ClientRequestJsonConverter : JsonConverter<ClientRequest>
     {
         switch (value)
         {
+            case AccountGatewayOAuthCancelRequest concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
+            case AccountGatewayOAuthLoginRequest concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
+            case AccountGatewayOAuthReadRequest concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
             case AccountLoginCancelRequest concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
@@ -203,6 +219,9 @@ public class ClientRequestJsonConverter : JsonConverter<ClientRequest>
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
             case ExternalAgentConfigImportRecordHistoryRequest concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
+            case FeedbackSaveRequest concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
             case FeedbackUploadRequest concrete:
@@ -328,6 +347,18 @@ public class ClientRequestJsonConverter : JsonConverter<ClientRequest>
             case ThreadArchiveRequest concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
+            case ThreadAttachmentAddRequest concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
+            case ThreadAttachmentListRequest concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
+            case ThreadAttachmentRemoveRequest concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
+            case ThreadAttachmentOwnerListRequest concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
             case ThreadCompactStartRequest concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
@@ -371,9 +402,6 @@ public class ClientRequestJsonConverter : JsonConverter<ClientRequest>
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
             case ThreadRevertRequest concrete:
-                JsonSerializer.Serialize(writer, concrete, options);
-                break;
-            case ThreadRollbackRequest concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
             case ThreadSectionMoveRequest concrete:

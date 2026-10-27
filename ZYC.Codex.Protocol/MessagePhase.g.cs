@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace ZYC.Codex.Protocol;
 
 /// <summary>
-///     Classifies an assistant message as interim commentary or final answer text.
+///     Classifies assistant text as commentary, a partial answer, or a terminal answer.
 ///     
 ///     Providers do not emit this consistently, so callers must treat `None` as "phase unknown" and keep compatibility behavior for legacy models.
 /// </summary>
@@ -15,4 +15,5 @@ public enum MessagePhase
 {
     Commentary,
     FinalAnswer,
+    PartialAnswer,
 }

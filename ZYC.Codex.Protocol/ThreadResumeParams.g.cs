@@ -63,6 +63,9 @@ public class ThreadResumeParams
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> ModelProvider { get; set; }
 
+    /// <summary>
+    ///     @deprecated `friendly` and `pragmatic` no longer select a style. Changing this does not rewrite the thread's existing instructions.
+    /// </summary>
     [JsonPropertyName("personality")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<Personality?> Personality { get; set; }

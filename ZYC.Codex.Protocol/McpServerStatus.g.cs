@@ -2,6 +2,7 @@
 #nullable enable
 
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace ZYC.Codex.Protocol;
@@ -12,6 +13,13 @@ public class McpServerStatus
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public McpAuthStatus AuthStatus { get; set; } = default!;
+
+    /// <summary>
+    ///     HTTP origin of the effective configured endpoint, including plugin servers. Excludes credentials, path, query, and fragment; null for non-HTTP transports.
+    /// </summary>
+    [JsonPropertyName("httpOrigin")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> HttpOrigin { get; set; }
 
     [JsonPropertyName("name")]
     [JsonRequired]
@@ -39,13 +47,34 @@ public class McpServerStatus
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<McpServerConnectionStatus?> RuntimeStatus { get; set; }
 
+    /// <summary>
+    ///     Capabilities advertised by the initialized MCP server; null when unavailable.
+    /// </summary>
+    [JsonPropertyName("serverCapabilities")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<JsonElement> ServerCapabilities { get; set; }
+
     [JsonPropertyName("serverInfo")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<McpServerInfo?> ServerInfo { get; set; }
+
+    /// <summary>
+    ///     Opaque `_meta` from the first page of the corresponding MCP tool catalog. Null when unavailable.
+    /// </summary>
+    [JsonPropertyName("toolListMeta")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<JsonElement> ToolListMeta { get; set; }
 
     [JsonPropertyName("tools")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public Dictionary<string, Tool> Tools { get; set; } = default!;
+
+    /// <summary>
+    ///     Tool discovery failed and no catalog was returned. Null when a catalog is returned, including cached or empty catalogs.
+    /// </summary>
+    [JsonPropertyName("toolsError")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> ToolsError { get; set; }
 
 }

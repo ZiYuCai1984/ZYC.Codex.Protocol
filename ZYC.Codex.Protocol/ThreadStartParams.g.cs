@@ -48,6 +48,9 @@ public class ThreadStartParams
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> ModelProvider { get; set; }
 
+    /// <summary>
+    ///     @deprecated `friendly` and `pragmatic` no longer select a style.
+    /// </summary>
     [JsonPropertyName("personality")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<Personality?> Personality { get; set; }

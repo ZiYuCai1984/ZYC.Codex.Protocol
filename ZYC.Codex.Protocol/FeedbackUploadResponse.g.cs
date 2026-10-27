@@ -7,6 +7,13 @@ namespace ZYC.Codex.Protocol;
 
 public class FeedbackUploadResponse
 {
+    /// <summary>
+    ///     Whitespace-normalized SHA-256 of the session base instructions, matching the uploaded `prompt_hash` tag. Does not include later developer messages. Null when the reported rollout has no prompt metadata.
+    /// </summary>
+    [JsonPropertyName("promptHash")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> PromptHash { get; set; }
+
     [JsonPropertyName("threadId")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]

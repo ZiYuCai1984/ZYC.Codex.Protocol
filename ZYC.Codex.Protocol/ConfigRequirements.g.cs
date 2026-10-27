@@ -2,6 +2,7 @@
 #nullable enable
 
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace ZYC.Codex.Protocol;
@@ -36,6 +37,13 @@ public class ConfigRequirements
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<List<AskForApproval>?> AllowedApprovalPolicies { get; set; }
 
+    /// <summary>
+    ///     Effective login methods after managed, forced-login, and workspace restrictions. An empty list permits no login method. Older servers may omit this field.
+    /// </summary>
+    [JsonPropertyName("allowedLoginMethods")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<List<ForcedLoginMethod>?> AllowedLoginMethods { get; set; }
+
     [JsonPropertyName("allowedPermissionProfiles")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<Dictionary<string, bool>?> AllowedPermissionProfiles { get; set; }
@@ -50,7 +58,7 @@ public class ConfigRequirements
 
     [JsonPropertyName("allowedWindowsSandboxImplementations")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public Optional<List<WindowsSandboxSetupMode>?> AllowedWindowsSandboxImplementations { get; set; }
+    public Optional<List<WindowsSandboxImplementation>?> AllowedWindowsSandboxImplementations { get; set; }
 
     [JsonPropertyName("autoReview")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
@@ -104,6 +112,20 @@ public class ConfigRequirements
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> ModelCatalogJson { get; set; }
 
+    /// <summary>
+    ///     Exact provider selection required by managed policy.
+    /// </summary>
+    [JsonPropertyName("modelProvider")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> ModelProvider { get; set; }
+
+    /// <summary>
+    ///     Complete required provider definitions, using config.toml field names.
+    /// </summary>
+    [JsonPropertyName("modelProviders")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<Dictionary<string, JsonElement>?> ModelProviders { get; set; }
+
     [JsonPropertyName("models")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<ModelsRequirements?> Models { get; set; }
@@ -111,9 +133,5 @@ public class ConfigRequirements
     [JsonPropertyName("sqliteHome")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> SqliteHome { get; set; }
-
-    [JsonPropertyName("windowsSandboxPrivateDesktop")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public Optional<bool?> WindowsSandboxPrivateDesktop { get; set; }
 
 }

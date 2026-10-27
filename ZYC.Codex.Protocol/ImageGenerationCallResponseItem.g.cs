@@ -8,6 +8,10 @@ namespace ZYC.Codex.Protocol;
 
 public class ImageGenerationCallResponseItem : ResponseItem
 {
+    [JsonPropertyName("encrypted_content")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> EncryptedContent { get; set; }
+
     [JsonPropertyName("id")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> Id { get; set; }

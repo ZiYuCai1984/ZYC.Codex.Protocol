@@ -14,4 +14,5 @@ namespace ZYC.Codex.Protocol;
 public abstract class CodexErrorInfo
 {
     private protected CodexErrorInfo() { }
+    public static implicit operator CodexErrorInfo(string value) => new CodexErrorInfoUnknownString { Value = value };
 }

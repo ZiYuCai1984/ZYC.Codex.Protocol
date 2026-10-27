@@ -28,4 +28,8 @@ public class RealtimeVoicesList
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public List<RealtimeVoice> V2 { get; set; } = default!;
 
+    [JsonPropertyName("v3")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<List<RealtimeVoice>> V3 { get; set; }
+
 }

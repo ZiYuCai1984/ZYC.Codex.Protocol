@@ -23,6 +23,13 @@ public class McpResourceReadParams
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public string Server { get; set; } = default!;
 
+    /// <summary>
+    ///     Explicit hosted app/account. Omit to retain legacy resource discovery.
+    /// </summary>
+    [JsonPropertyName("target")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<McpResourceReadTarget?> Target { get; set; }
+
     [JsonPropertyName("threadId")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> ThreadId { get; set; }

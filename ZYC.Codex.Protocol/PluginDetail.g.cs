@@ -41,6 +41,13 @@ public class PluginDetail
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public List<string> McpServers { get; set; } = default!;
 
+    /// <summary>
+    ///     The declared onboarding skill, when the plugin and visible skill are enabled.
+    /// </summary>
+    [JsonPropertyName("onboardingSkill")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<SkillSummary?> OnboardingSkill { get; set; }
+
     [JsonPropertyName("scheduledTasks")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<List<ScheduledTaskSummary>?> ScheduledTasks { get; set; }

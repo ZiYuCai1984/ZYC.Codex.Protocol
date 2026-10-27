@@ -7,6 +7,13 @@ namespace ZYC.Codex.Protocol;
 
 public class ThreadGoalClearParams
 {
+    /// <summary>
+    ///     Missing provenance does not supply user authorization.
+    /// </summary>
+    [JsonPropertyName("origin")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<ThreadGoalMutationOrigin?> Origin { get; set; }
+
     [JsonPropertyName("threadId")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]

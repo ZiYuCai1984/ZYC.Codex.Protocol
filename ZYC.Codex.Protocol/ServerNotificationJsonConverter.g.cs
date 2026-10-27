@@ -17,6 +17,7 @@ public class ServerNotificationJsonConverter : JsonConverter<ServerNotification>
             throw new JsonException("Missing or invalid ServerNotification method.");
         return discriminator.GetString() switch
         {
+            "account/gatewayOAuth/changed" => root.Deserialize<AccountGatewayOAuthChangedNotification>(options) ?? throw new JsonException("Expected AccountGatewayOAuthChangedNotification."),
             "account/login/completed" => root.Deserialize<AccountLoginCompletedNotification2>(options) ?? throw new JsonException("Expected AccountLoginCompletedNotification2."),
             "account/rateLimits/updated" => root.Deserialize<AccountRateLimitsUpdatedNotification2>(options) ?? throw new JsonException("Expected AccountRateLimitsUpdatedNotification2."),
             "account/updated" => root.Deserialize<AccountUpdatedNotification2>(options) ?? throw new JsonException("Expected AccountUpdatedNotification2."),
@@ -63,6 +64,7 @@ public class ServerNotificationJsonConverter : JsonConverter<ServerNotification>
             "serverRequest/resolved" => root.Deserialize<ServerRequestResolvedNotification2>(options) ?? throw new JsonException("Expected ServerRequestResolvedNotification2."),
             "skills/changed" => root.Deserialize<SkillsChangedNotification2>(options) ?? throw new JsonException("Expected SkillsChangedNotification2."),
             "thread/archived" => root.Deserialize<ThreadArchivedNotification2>(options) ?? throw new JsonException("Expected ThreadArchivedNotification2."),
+            "thread/attachment/updated" => root.Deserialize<ThreadAttachmentUpdatedNotification2>(options) ?? throw new JsonException("Expected ThreadAttachmentUpdatedNotification2."),
             "thread/closed" => root.Deserialize<ThreadClosedNotification2>(options) ?? throw new JsonException("Expected ThreadClosedNotification2."),
             "thread/compacted" => root.Deserialize<ThreadCompactedNotification>(options) ?? throw new JsonException("Expected ThreadCompactedNotification."),
             "thread/deleted" => root.Deserialize<ThreadDeletedNotification2>(options) ?? throw new JsonException("Expected ThreadDeletedNotification2."),
@@ -71,8 +73,10 @@ public class ServerNotificationJsonConverter : JsonConverter<ServerNotification>
             "thread/goal/cleared" => root.Deserialize<ThreadGoalClearedNotification2>(options) ?? throw new JsonException("Expected ThreadGoalClearedNotification2."),
             "thread/goal/updated" => root.Deserialize<ThreadGoalUpdatedNotification2>(options) ?? throw new JsonException("Expected ThreadGoalUpdatedNotification2."),
             "thread/name/updated" => root.Deserialize<ThreadNameUpdatedNotification2>(options) ?? throw new JsonException("Expected ThreadNameUpdatedNotification2."),
+            "thread/prediction/updated" => root.Deserialize<ThreadPredictionUpdatedNotification2>(options) ?? throw new JsonException("Expected ThreadPredictionUpdatedNotification2."),
             "thread/project/updated" => root.Deserialize<ThreadProjectUpdatedNotification2>(options) ?? throw new JsonException("Expected ThreadProjectUpdatedNotification2."),
             "thread/queue/changed" => root.Deserialize<ThreadQueueChangedNotification2>(options) ?? throw new JsonException("Expected ThreadQueueChangedNotification2."),
+            "thread/readState/changed" => root.Deserialize<ThreadReadStateChangedNotification2>(options) ?? throw new JsonException("Expected ThreadReadStateChangedNotification2."),
             "thread/realtime/closed" => root.Deserialize<ThreadRealtimeClosedNotification2>(options) ?? throw new JsonException("Expected ThreadRealtimeClosedNotification2."),
             "thread/realtime/error" => root.Deserialize<ThreadRealtimeErrorNotification2>(options) ?? throw new JsonException("Expected ThreadRealtimeErrorNotification2."),
             "thread/realtime/item/completed" => root.Deserialize<ThreadRealtimeItemCompletedNotification2>(options) ?? throw new JsonException("Expected ThreadRealtimeItemCompletedNotification2."),
@@ -106,6 +110,9 @@ public class ServerNotificationJsonConverter : JsonConverter<ServerNotification>
     {
         switch (value)
         {
+            case AccountGatewayOAuthChangedNotification concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
             case AccountLoginCompletedNotification2 concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
@@ -244,6 +251,9 @@ public class ServerNotificationJsonConverter : JsonConverter<ServerNotification>
             case ThreadArchivedNotification2 concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
+            case ThreadAttachmentUpdatedNotification2 concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
             case ThreadClosedNotification2 concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
@@ -268,10 +278,16 @@ public class ServerNotificationJsonConverter : JsonConverter<ServerNotification>
             case ThreadNameUpdatedNotification2 concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
+            case ThreadPredictionUpdatedNotification2 concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
             case ThreadProjectUpdatedNotification2 concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
             case ThreadQueueChangedNotification2 concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
+            case ThreadReadStateChangedNotification2 concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
             case ThreadRealtimeClosedNotification2 concrete:

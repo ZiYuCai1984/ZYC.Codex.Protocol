@@ -16,6 +16,13 @@ public class GetAccountRateLimitsResponse
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> AccountId { get; set; }
 
+    /// <summary>
+    ///     Backend permission for ordinary included usage, validated against the active account. Null means unavailable; clients must not infer recovery from percentages or reset times.
+    /// </summary>
+    [JsonPropertyName("ordinaryUsageAllowed")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<bool?> OrdinaryUsageAllowed { get; set; }
+
     [JsonPropertyName("rateLimitResetCredits")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<RateLimitResetCreditsSummary?> RateLimitResetCredits { get; set; }

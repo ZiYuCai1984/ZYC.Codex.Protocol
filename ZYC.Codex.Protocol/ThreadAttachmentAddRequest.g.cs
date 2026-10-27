@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace ZYC.Codex.Protocol;
 
-public class ThreadRollbackRequest : ClientRequest
+public class ThreadAttachmentAddRequest : ClientRequest
 {
     [JsonPropertyName("id")]
     [JsonRequired]
@@ -19,12 +19,12 @@ public class ThreadRollbackRequest : ClientRequest
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public string Method
     {
-        get => "thread/rollback";
+        get => "thread/attachment/add";
         private set
         {
-            if (value != "thread/rollback")
+            if (value != "thread/attachment/add")
             {
-                throw new JsonException("Expected ThreadRollbackRequest.method to be thread/rollback.");
+                throw new JsonException("Expected ThreadAttachmentAddRequest.method to be thread/attachment/add.");
             }
         }
     }
@@ -32,6 +32,6 @@ public class ThreadRollbackRequest : ClientRequest
     [JsonPropertyName("params")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public ThreadRollbackParams Params { get; set; } = default!;
+    public ThreadAttachmentAddParams Params { get; set; } = default!;
 
 }

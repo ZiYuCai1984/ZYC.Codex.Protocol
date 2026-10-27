@@ -28,6 +28,20 @@ public class SubAgentActivityThreadItem : ThreadItem
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public SubAgentActivityKind Kind { get; set; } = default!;
 
+    /// <summary>
+    ///     Resolved model at sub-agent creation; absent from older records and other activities.
+    /// </summary>
+    [JsonPropertyName("model")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> Model { get; set; }
+
+    /// <summary>
+    ///     Resolved reasoning effort at sub-agent creation, when known.
+    /// </summary>
+    [JsonPropertyName("reasoningEffort")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> ReasoningEffort { get; set; }
+
     [JsonPropertyName("type")]
     [JsonInclude]
     [JsonRequired]

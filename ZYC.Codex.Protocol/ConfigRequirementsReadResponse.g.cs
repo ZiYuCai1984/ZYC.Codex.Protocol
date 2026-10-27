@@ -14,4 +14,11 @@ public class ConfigRequirementsReadResponse
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<ConfigRequirements?> Requirements { get; set; }
 
+    /// <summary>
+    ///     Whether Fast and Ultra Fast requirements are enforced independently. Older servers omit this field and use Fast mode as a shared speed gate.
+    /// </summary>
+    [JsonPropertyName("supportsIndependentSpeedModes")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<bool?> SupportsIndependentSpeedModes { get; set; }
+
 }

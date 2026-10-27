@@ -25,7 +25,7 @@ public class ConfigBatchWriteParams
     public Optional<string?> FilePath { get; set; }
 
     /// <summary>
-    ///     When true, hot-reload updated runtime settings into loaded threads after writing. Session-static model, reasoning-effort, Plan-mode reasoning-effort, service-tier, and personality defaults are not reloaded.
+    ///     When true, hot-reload updated runtime settings into loaded threads after writing. Session-static model, reasoning-effort, Plan-mode reasoning-effort, and service-tier defaults are not reloaded. The deprecated personality setting is also not reloaded.
     /// </summary>
     [JsonPropertyName("reloadUserConfig")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

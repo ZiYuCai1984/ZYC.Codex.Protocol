@@ -14,15 +14,35 @@ public class CodexErrorInfoJsonConverter : JsonConverter<CodexErrorInfo>
         using var document = JsonDocument.ParseValue(ref reader);
         var root = document.RootElement;
         if (root.ValueKind == JsonValueKind.Object && root.TryGetProperty("activeTurnNotSteerable", out var property0))
-            return root.Deserialize<ActiveTurnNotSteerableCodexErrorInfo>(options) ?? throw new JsonException("Expected ActiveTurnNotSteerableCodexErrorInfo.");
+        {
+            try
+            {
+                return root.Deserialize<ActiveTurnNotSteerableCodexErrorInfo>(options) ?? throw new JsonException("Expected ActiveTurnNotSteerableCodexErrorInfo.");
+            }
+            catch (JsonException)
+            {
+                // The schema's open anyOf branch also accepts this value.
+            }
+        }
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "badRequest")
             return new CodexErrorInfoBadRequest();
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "contextWindowExceeded")
             return new CodexErrorInfoContextWindowExceeded();
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "cyberPolicy")
             return new CodexErrorInfoCyberPolicy();
+        if (root.ValueKind == JsonValueKind.String && root.GetString() == "flexUnavailable")
+            return new CodexErrorInfoFlexUnavailable();
         if (root.ValueKind == JsonValueKind.Object && root.TryGetProperty("httpConnectionFailed", out var property1))
-            return root.Deserialize<HttpConnectionFailedCodexErrorInfo>(options) ?? throw new JsonException("Expected HttpConnectionFailedCodexErrorInfo.");
+        {
+            try
+            {
+                return root.Deserialize<HttpConnectionFailedCodexErrorInfo>(options) ?? throw new JsonException("Expected HttpConnectionFailedCodexErrorInfo.");
+            }
+            catch (JsonException)
+            {
+                // The schema's open anyOf branch also accepts this value.
+            }
+        }
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "internalServerError")
             return new CodexErrorInfoInternalServerError();
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "misalignmentPolicyViolation")
@@ -32,11 +52,38 @@ public class CodexErrorInfoJsonConverter : JsonConverter<CodexErrorInfo>
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "rateLimitExceeded")
             return new CodexErrorInfoRateLimitExceeded();
         if (root.ValueKind == JsonValueKind.Object && root.TryGetProperty("responseStreamConnectionFailed", out var property2))
-            return root.Deserialize<ResponseStreamConnectionFailedCodexErrorInfo>(options) ?? throw new JsonException("Expected ResponseStreamConnectionFailedCodexErrorInfo.");
+        {
+            try
+            {
+                return root.Deserialize<ResponseStreamConnectionFailedCodexErrorInfo>(options) ?? throw new JsonException("Expected ResponseStreamConnectionFailedCodexErrorInfo.");
+            }
+            catch (JsonException)
+            {
+                // The schema's open anyOf branch also accepts this value.
+            }
+        }
         if (root.ValueKind == JsonValueKind.Object && root.TryGetProperty("responseStreamDisconnected", out var property3))
-            return root.Deserialize<ResponseStreamDisconnectedCodexErrorInfo>(options) ?? throw new JsonException("Expected ResponseStreamDisconnectedCodexErrorInfo.");
+        {
+            try
+            {
+                return root.Deserialize<ResponseStreamDisconnectedCodexErrorInfo>(options) ?? throw new JsonException("Expected ResponseStreamDisconnectedCodexErrorInfo.");
+            }
+            catch (JsonException)
+            {
+                // The schema's open anyOf branch also accepts this value.
+            }
+        }
         if (root.ValueKind == JsonValueKind.Object && root.TryGetProperty("responseTooManyFailedAttempts", out var property4))
-            return root.Deserialize<ResponseTooManyFailedAttemptsCodexErrorInfo>(options) ?? throw new JsonException("Expected ResponseTooManyFailedAttemptsCodexErrorInfo.");
+        {
+            try
+            {
+                return root.Deserialize<ResponseTooManyFailedAttemptsCodexErrorInfo>(options) ?? throw new JsonException("Expected ResponseTooManyFailedAttemptsCodexErrorInfo.");
+            }
+            catch (JsonException)
+            {
+                // The schema's open anyOf branch also accepts this value.
+            }
+        }
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "sandboxError")
             return new CodexErrorInfoSandboxError();
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "serverOverloaded")
@@ -45,10 +92,16 @@ public class CodexErrorInfoJsonConverter : JsonConverter<CodexErrorInfo>
             return new CodexErrorInfoSessionBudgetExceeded();
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "threadRollbackFailed")
             return new CodexErrorInfoThreadRollbackFailed();
+        if (root.ValueKind == JsonValueKind.String && root.GetString() == "tooManyDenials")
+            return new CodexErrorInfoTooManyDenials();
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "unauthorized")
             return new CodexErrorInfoUnauthorized();
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "usageLimitExceeded")
             return new CodexErrorInfoUsageLimitExceeded();
+        if (root.ValueKind == JsonValueKind.String)
+            return new CodexErrorInfoUnknownString { Value = root.Deserialize<string>(options)! };
+        if (root.ValueKind == JsonValueKind.Object)
+            return new CodexErrorInfoUnknownObject { Value = root.Clone() };
         throw new JsonException("Unknown CodexErrorInfo wire shape or value.");
     }
 
@@ -67,6 +120,9 @@ public class CodexErrorInfoJsonConverter : JsonConverter<CodexErrorInfo>
                 break;
             case CodexErrorInfoCyberPolicy concrete:
                 writer.WriteStringValue("cyberPolicy");
+                break;
+            case CodexErrorInfoFlexUnavailable concrete:
+                writer.WriteStringValue("flexUnavailable");
                 break;
             case HttpConnectionFailedCodexErrorInfo concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
@@ -104,11 +160,22 @@ public class CodexErrorInfoJsonConverter : JsonConverter<CodexErrorInfo>
             case CodexErrorInfoThreadRollbackFailed concrete:
                 writer.WriteStringValue("threadRollbackFailed");
                 break;
+            case CodexErrorInfoTooManyDenials concrete:
+                writer.WriteStringValue("tooManyDenials");
+                break;
             case CodexErrorInfoUnauthorized concrete:
                 writer.WriteStringValue("unauthorized");
                 break;
             case CodexErrorInfoUsageLimitExceeded concrete:
                 writer.WriteStringValue("usageLimitExceeded");
+                break;
+            case CodexErrorInfoUnknownString concrete:
+                JsonSerializer.Serialize(writer, concrete.Value, options);
+                break;
+            case CodexErrorInfoUnknownObject concrete:
+                if (concrete.Value.ValueKind != JsonValueKind.Object)
+                    throw new JsonException("Expected Object for CodexErrorInfoUnknownObject.");
+                concrete.Value.WriteTo(writer);
                 break;
             default: throw new JsonException("Unknown runtime type for CodexErrorInfo.");
         }

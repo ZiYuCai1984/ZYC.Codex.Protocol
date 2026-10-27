@@ -20,6 +20,13 @@ public class InitializeCapabilities
     public Optional<bool> ExperimentalApi { get; set; }
 
     /// <summary>
+    ///     Use explicit gateway OAuth login instead of automatic browser authorization. Applies to this app-server's gateway runtime; later connections cannot undo it.
+    /// </summary>
+    [JsonPropertyName("explicitGatewayOauth")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<bool> ExplicitGatewayOauth { get; set; }
+
+    /// <summary>
     ///     MCP extension settings declared by the app-server client.
     /// </summary>
     [JsonPropertyName("extensions")]

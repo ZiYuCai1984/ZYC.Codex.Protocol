@@ -22,6 +22,13 @@ public class MisalignmentErrorDetails
     public Optional<string?> ErrorType { get; set; }
 
     /// <summary>
+    ///     Opaque server-issued block target. Presence alone does not enable target-based continuation.
+    /// </summary>
+    [JsonPropertyName("reviewTarget")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> ReviewTarget { get; set; }
+
+    /// <summary>
     ///     Instruction to submit as the next turn's user input if continuation is confirmed.
     /// </summary>
     [JsonPropertyName("steer")]

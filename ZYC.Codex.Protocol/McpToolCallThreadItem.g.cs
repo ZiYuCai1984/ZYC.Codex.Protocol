@@ -34,11 +34,18 @@ public class McpToolCallThreadItem : ThreadItem
     public string Id { get; set; } = default!;
 
     /// <summary>
-    ///     Deprecated: use `appContext.resourceUri` instead.
+    ///     Legacy compatibility field; prefer `mcpAppUi.resourceUri` when available.
     /// </summary>
     [JsonPropertyName("mcpAppResourceUri")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> McpAppResourceUri { get; set; }
+
+    /// <summary>
+    ///     Presentation captured from the invoked descriptor; absent in older history.
+    /// </summary>
+    [JsonPropertyName("mcpAppUi")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<McpAppUi?> McpAppUi { get; set; }
 
     [JsonPropertyName("pluginId")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

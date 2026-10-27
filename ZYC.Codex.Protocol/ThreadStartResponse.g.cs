@@ -27,6 +27,13 @@ public class ThreadStartResponse
     public string Cwd { get; set; } = default!;
 
     /// <summary>
+    ///     Saved list of disabled plugin IDs. Does not yet filter plugin capabilities.
+    /// </summary>
+    [JsonPropertyName("disabledPluginIds")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<List<string>> DisabledPluginIds { get; set; }
+
+    /// <summary>
     ///     Environment-native paths to instruction source files currently loaded for this thread.
     /// </summary>
     [JsonPropertyName("instructionSources")]

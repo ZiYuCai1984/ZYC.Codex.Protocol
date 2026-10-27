@@ -21,4 +21,11 @@ public class TurnToolOutput
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public FunctionCallOutputBody Output { get; set; } = default!;
 
+    /// <summary>
+    ///     Requests retention of this output in the thread's model history.
+    /// </summary>
+    [JsonPropertyName("retain")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<bool> Retain { get; set; }
+
 }

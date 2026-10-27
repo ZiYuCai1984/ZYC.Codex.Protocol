@@ -23,6 +23,13 @@ public class RateLimitSnapshot
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> LimitName { get; set; }
 
+    /// <summary>
+    ///     Normal model whose display name and reasoning options describe this quota alias.
+    /// </summary>
+    [JsonPropertyName("normalModelSlug")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> NormalModelSlug { get; set; }
+
     [JsonPropertyName("planType")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<PlanType?> PlanType { get; set; }

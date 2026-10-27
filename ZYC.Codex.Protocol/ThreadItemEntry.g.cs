@@ -7,10 +7,24 @@ namespace ZYC.Codex.Protocol;
 
 public class ThreadItemEntry
 {
+    /// <summary>
+    ///     Unix timestamp (milliseconds) when the item completed, if recorded by the producer.
+    /// </summary>
+    [JsonPropertyName("completedAtMs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<long?> CompletedAtMs { get; set; }
+
     [JsonPropertyName("item")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public ThreadItem Item { get; set; } = default!;
+
+    /// <summary>
+    ///     Unix timestamp (milliseconds) when the item started, if recorded by the producer.
+    /// </summary>
+    [JsonPropertyName("startedAtMs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<long?> StartedAtMs { get; set; }
 
     /// <summary>
     ///     Turn containing this item.

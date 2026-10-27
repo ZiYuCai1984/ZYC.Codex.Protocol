@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace ZYC.Codex.Protocol;
 
 /// <summary>
-///     Requested cyber treatment for a ChatGPT-authenticated Codex turn. Authorization and model-tier restrictions remain server-owned.
+///     Requested cyber treatment for an OpenAI model turn. Authorization and model-tier restrictions remain server-owned.
 /// </summary>
 [JsonConverter(typeof(CyberAccessProgramJsonConverter))]
 public enum CyberAccessProgram

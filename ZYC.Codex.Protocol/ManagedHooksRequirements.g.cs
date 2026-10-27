@@ -22,6 +22,10 @@ public class ManagedHooksRequirements
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public List<ConfiguredHookMatcherGroup> PostCompact { get; set; } = default!;
 
+    [JsonPropertyName("PostModelRequest")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<List<ConfiguredHookMatcherGroup>> PostModelRequest { get; set; }
+
     [JsonPropertyName("PostToolUse")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
@@ -31,6 +35,10 @@ public class ManagedHooksRequirements
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public List<ConfiguredHookMatcherGroup> PreCompact { get; set; } = default!;
+
+    [JsonPropertyName("PreModelRequest")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<List<ConfiguredHookMatcherGroup>> PreModelRequest { get; set; }
 
     [JsonPropertyName("PreToolUse")]
     [JsonRequired]

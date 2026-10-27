@@ -19,6 +19,13 @@ public class Model
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<ModelAvailabilityNux?> AvailabilityNux { get; set; }
 
+    /// <summary>
+    ///     Null when the catalog does not provide access-program metadata.
+    /// </summary>
+    [JsonPropertyName("availableAccessPrograms")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<ModelAccessPrograms?> AvailableAccessPrograms { get; set; }
+
     [JsonPropertyName("defaultReasoningEffort")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
@@ -85,6 +92,9 @@ public class Model
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public List<ReasoningEffortOption> SupportedReasoningEfforts { get; set; } = default!;
 
+    /// <summary>
+    ///     @deprecated Always false; models no longer support personality selection.
+    /// </summary>
     [JsonPropertyName("supportsPersonality")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<bool> SupportsPersonality { get; set; }
