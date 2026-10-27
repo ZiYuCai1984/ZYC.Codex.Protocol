@@ -1,10 +1,10 @@
-﻿name: update-codex-protocol
+name: update-codex-protocol
 
 on:
   workflow_dispatch:
   schedule:
-    # Daily at 00:17 UTC / 09:17 Asia/Tokyo.
-    - cron: '17 0 * * *'
+    - cron: '17 9 * * *'
+      timezone: 'Asia/Tokyo'
 
 concurrency:
   group: update-codex-protocol
