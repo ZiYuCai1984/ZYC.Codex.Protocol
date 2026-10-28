@@ -67,6 +67,13 @@ public class NetworkRequirements
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<bool?> ManagedAllowedDomainsOnly { get; set; }
 
+    /// <summary>
+    ///     Host patterns routed to network approval before ordinary allow rules.
+    /// </summary>
+    [JsonPropertyName("reviewDomains")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<List<string>?> ReviewDomains { get; set; }
+
     [JsonPropertyName("socksPort")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<ushort?> SocksPort { get; set; }

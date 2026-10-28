@@ -20,6 +20,7 @@ public class AccountJsonConverter : JsonConverter<Account>
             "amazonBedrock" => root.Deserialize<AmazonBedrockAccount>(options) ?? throw new JsonException("Expected AmazonBedrockAccount."),
             "apiKey" => root.Deserialize<ApiKeyAccount>(options) ?? throw new JsonException("Expected ApiKeyAccount."),
             "chatgpt" => root.Deserialize<ChatgptAccount>(options) ?? throw new JsonException("Expected ChatgptAccount."),
+            "gcp" => root.Deserialize<GcpAccount>(options) ?? throw new JsonException("Expected GcpAccount."),
             _ => throw new JsonException("Unknown Account type \u0027" + discriminator.GetString() + "\u0027.")
         };
     }
@@ -35,6 +36,9 @@ public class AccountJsonConverter : JsonConverter<Account>
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
             case ChatgptAccount concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
+            case GcpAccount concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
             default: throw new JsonException("Unknown runtime type for Account.");

@@ -47,6 +47,8 @@ public class CodexErrorInfoJsonConverter : JsonConverter<CodexErrorInfo>
             return new CodexErrorInfoInternalServerError();
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "misalignmentPolicyViolation")
             return new CodexErrorInfoMisalignmentPolicyViolation();
+        if (root.ValueKind == JsonValueKind.String && root.GetString() == "modelNotFound")
+            return new CodexErrorInfoModelNotFound();
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "other")
             return new CodexErrorInfoOther();
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "rateLimitExceeded")
@@ -132,6 +134,9 @@ public class CodexErrorInfoJsonConverter : JsonConverter<CodexErrorInfo>
                 break;
             case CodexErrorInfoMisalignmentPolicyViolation concrete:
                 writer.WriteStringValue("misalignmentPolicyViolation");
+                break;
+            case CodexErrorInfoModelNotFound concrete:
+                writer.WriteStringValue("modelNotFound");
                 break;
             case CodexErrorInfoOther concrete:
                 writer.WriteStringValue("other");

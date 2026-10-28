@@ -36,8 +36,8 @@ Import the `ZYC.Codex.Protocol` namespace to use the protocol types. JSON conver
 <!-- codex-version:start -->
 | Component | Version |
 | --- | --- |
-| Codex CLI / schema | [0.164.0](https://www.npmjs.com/package/@openai/codex/v/0.164.0) |
-| NuGet package | [1.0.0-0.164.0](https://www.nuget.org/packages/ZYC.Codex.Protocol/1.0.0-0.164.0) |
+| Codex CLI / schema | [0.165.0](https://www.npmjs.com/package/@openai/codex/v/0.165.0) |
+| NuGet package | [1.0.0-0.165.0](https://www.nuget.org/packages/ZYC.Codex.Protocol/1.0.0-0.165.0) |
 <!-- codex-version:end -->
 
 Automated packages follow the Generator's `ProductInfo.Version` expression. The current `1.0.0-{CodexVersion}` template produces versions such as `1.0.0-0.164.0`. The Codex CLI version identifies the schema exported by that CLI, as described in the [app-server documentation](https://developers.openai.com/codex/app-server). `ProductInfo.Version` exposes the full package version and `ProductInfo.CodexVersion` exposes the pinned upstream version (empty for the original untracked snapshot).
