@@ -46,7 +46,7 @@ public class NetworkRequirements
     public Optional<List<string>?> DeniedDomains { get; set; }
 
     /// <summary>
-    ///     Canonical network permission map for `experimental_network`.
+    ///     Canonical managed network permission map.
     /// </summary>
     [JsonPropertyName("domains")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
@@ -79,7 +79,7 @@ public class NetworkRequirements
     public Optional<ushort?> SocksPort { get; set; }
 
     /// <summary>
-    ///     Canonical unix socket permission map for `experimental_network`.
+    ///     Canonical managed unix socket permission map.
     /// </summary>
     [JsonPropertyName("unixSockets")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

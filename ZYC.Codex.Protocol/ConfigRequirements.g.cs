@@ -130,6 +130,10 @@ public class ConfigRequirements
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<ModelsRequirements?> Models { get; set; }
 
+    [JsonPropertyName("otel")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<OtelRequirements?> Otel { get; set; }
+
     [JsonPropertyName("sqliteHome")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> SqliteHome { get; set; }

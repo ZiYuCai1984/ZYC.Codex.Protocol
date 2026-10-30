@@ -33,6 +33,13 @@ public class CommandExecutionThreadItem : ThreadItem
     public List<CommandAction> CommandActions { get; set; } = default!;
 
     /// <summary>
+    ///     Unix timestamp in milliseconds when the item completed, if recorded.
+    /// </summary>
+    [JsonPropertyName("completedAtMs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<long?> CompletedAtMs { get; set; }
+
+    /// <summary>
     ///     The command's working directory.
     /// </summary>
     [JsonPropertyName("cwd")]
@@ -83,6 +90,13 @@ public class CommandExecutionThreadItem : ThreadItem
     [JsonPropertyName("source")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<CommandExecutionSource> Source { get; set; }
+
+    /// <summary>
+    ///     Unix timestamp in milliseconds when the item started, if recorded.
+    /// </summary>
+    [JsonPropertyName("startedAtMs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<long?> StartedAtMs { get; set; }
 
     [JsonPropertyName("status")]
     [JsonRequired]

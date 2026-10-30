@@ -14,9 +14,23 @@ namespace ZYC.Codex.Protocol;
 /// </summary>
 public class ImageGenerationThreadItem : ThreadItem
 {
+    /// <summary>
+    ///     Unix timestamp in milliseconds when the item completed, if recorded.
+    /// </summary>
+    [JsonPropertyName("completedAtMs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<long?> CompletedAtMs { get; set; }
+
     [JsonPropertyName("failure")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<ImageGenerationFailure?> Failure { get; set; }
+
+    /// <summary>
+    ///     Image generation identifier for the generated image, when provided by the image backend.
+    /// </summary>
+    [JsonPropertyName("generationId")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> GenerationId { get; set; }
 
     [JsonPropertyName("id")]
     [JsonRequired]
@@ -37,6 +51,13 @@ public class ImageGenerationThreadItem : ThreadItem
     [JsonPropertyName("savedPath")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> SavedPath { get; set; }
+
+    /// <summary>
+    ///     Unix timestamp in milliseconds when the item started, if recorded.
+    /// </summary>
+    [JsonPropertyName("startedAtMs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<long?> StartedAtMs { get; set; }
 
     [JsonPropertyName("status")]
     [JsonRequired]

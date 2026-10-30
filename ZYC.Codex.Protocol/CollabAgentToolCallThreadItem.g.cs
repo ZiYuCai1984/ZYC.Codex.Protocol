@@ -18,6 +18,13 @@ public class CollabAgentToolCallThreadItem : ThreadItem
     public Dictionary<string, CollabAgentState> AgentsStates { get; set; } = default!;
 
     /// <summary>
+    ///     Unix timestamp in milliseconds when the item completed, if recorded.
+    /// </summary>
+    [JsonPropertyName("completedAtMs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<long?> CompletedAtMs { get; set; }
+
+    /// <summary>
     ///     Unique identifier for this collab tool call.
     /// </summary>
     [JsonPropertyName("id")]
@@ -61,6 +68,13 @@ public class CollabAgentToolCallThreadItem : ThreadItem
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public string SenderThreadId { get; set; } = default!;
+
+    /// <summary>
+    ///     Unix timestamp in milliseconds when the item started, if recorded.
+    /// </summary>
+    [JsonPropertyName("startedAtMs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<long?> StartedAtMs { get; set; }
 
     /// <summary>
     ///     Current status of the collab tool call.

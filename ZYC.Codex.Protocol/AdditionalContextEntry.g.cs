@@ -12,6 +12,13 @@ public class AdditionalContextEntry
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public AdditionalContextKind Kind { get; set; } = default!;
 
+    /// <summary>
+    ///     Optional name for untrusted context, used to label its tool output.
+    /// </summary>
+    [JsonPropertyName("name")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> Name { get; set; }
+
     [JsonPropertyName("value")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]

@@ -13,6 +13,13 @@ public class UserMessageThreadItem : ThreadItem
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> ClientId { get; set; }
 
+    /// <summary>
+    ///     Unix timestamp in milliseconds when the item completed, if recorded.
+    /// </summary>
+    [JsonPropertyName("completedAtMs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<long?> CompletedAtMs { get; set; }
+
     [JsonPropertyName("content")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
@@ -22,6 +29,13 @@ public class UserMessageThreadItem : ThreadItem
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public string Id { get; set; } = default!;
+
+    /// <summary>
+    ///     Unix timestamp in milliseconds when the item started, if recorded.
+    /// </summary>
+    [JsonPropertyName("startedAtMs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<long?> StartedAtMs { get; set; }
 
     [JsonPropertyName("type")]
     [JsonInclude]

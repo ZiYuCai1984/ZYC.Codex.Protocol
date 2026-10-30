@@ -5,6 +5,9 @@ using System.Text.Json.Serialization;
 
 namespace ZYC.Codex.Protocol;
 
+/// <summary>
+///     A thread item and its recorded lifecycle times. The payload stays flat on the wire.
+/// </summary>
 [JsonConverter(typeof(ThreadItemJsonConverter))]
 public abstract class ThreadItem
 {

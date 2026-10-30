@@ -30,6 +30,13 @@ public class HookMetadataMcpTool : HookMetadata
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public bool Enabled { get; set; } = default!;
 
+    /// <summary>
+    ///     The owning execution environment, if this hook came from its requirements.
+    /// </summary>
+    [JsonPropertyName("environmentId")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> EnvironmentId { get; set; }
+
     [JsonPropertyName("eventName")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]

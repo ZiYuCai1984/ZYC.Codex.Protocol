@@ -18,6 +18,13 @@ public class McpToolCallThreadItem : ThreadItem
     public JsonElement Arguments { get; set; } = default!;
 
     /// <summary>
+    ///     Unix timestamp in milliseconds when the item completed, if recorded.
+    /// </summary>
+    [JsonPropertyName("completedAtMs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<long?> CompletedAtMs { get; set; }
+
+    /// <summary>
     ///     The duration of the MCP tool call in milliseconds.
     /// </summary>
     [JsonPropertyName("durationMs")]
@@ -63,6 +70,13 @@ public class McpToolCallThreadItem : ThreadItem
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public string Server { get; set; } = default!;
+
+    /// <summary>
+    ///     Unix timestamp in milliseconds when the item started, if recorded.
+    /// </summary>
+    [JsonPropertyName("startedAtMs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<long?> StartedAtMs { get; set; }
 
     [JsonPropertyName("status")]
     [JsonRequired]

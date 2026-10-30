@@ -14,6 +14,13 @@ public class DynamicToolCallThreadItem : ThreadItem
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public JsonElement Arguments { get; set; } = default!;
 
+    /// <summary>
+    ///     Unix timestamp in milliseconds when the item completed, if recorded.
+    /// </summary>
+    [JsonPropertyName("completedAtMs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<long?> CompletedAtMs { get; set; }
+
     [JsonPropertyName("contentItems")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<List<DynamicToolCallOutputContentItem>?> ContentItems { get; set; }
@@ -33,6 +40,13 @@ public class DynamicToolCallThreadItem : ThreadItem
     [JsonPropertyName("namespace")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> Namespace { get; set; }
+
+    /// <summary>
+    ///     Unix timestamp in milliseconds when the item started, if recorded.
+    /// </summary>
+    [JsonPropertyName("startedAtMs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<long?> StartedAtMs { get; set; }
 
     [JsonPropertyName("status")]
     [JsonRequired]

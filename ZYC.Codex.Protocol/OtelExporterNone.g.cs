@@ -5,9 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace ZYC.Codex.Protocol;
 
-[JsonConverter(typeof(ReviewDeliveryJsonConverter))]
-public enum ReviewDelivery
+[JsonConverter(typeof(OtelExporterNoneJsonConverter))]
+public class OtelExporterNone : OtelExporter
 {
-    Detached,
-    Inline,
 }

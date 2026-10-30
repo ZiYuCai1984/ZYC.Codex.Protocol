@@ -22,6 +22,13 @@ public class ThreadUsage
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public List<ThreadUsageBreakdownGroup> Groups { get; set; } = default!;
 
+    /// <summary>
+    ///     Native dollar usage, independent of credit estimates. None means unknown, not zero.
+    /// </summary>
+    [JsonPropertyName("nativeUsageUsdMicros")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<long?> NativeUsageUsdMicros { get; set; }
+
     [JsonPropertyName("threadId")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]

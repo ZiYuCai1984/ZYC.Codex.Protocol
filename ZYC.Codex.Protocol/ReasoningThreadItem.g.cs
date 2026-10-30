@@ -9,6 +9,13 @@ namespace ZYC.Codex.Protocol;
 
 public class ReasoningThreadItem : ThreadItem
 {
+    /// <summary>
+    ///     Unix timestamp in milliseconds when the item completed, if recorded.
+    /// </summary>
+    [JsonPropertyName("completedAtMs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<long?> CompletedAtMs { get; set; }
+
     [JsonPropertyName("content")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<List<string>> Content { get; set; }
@@ -17,6 +24,13 @@ public class ReasoningThreadItem : ThreadItem
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public string Id { get; set; } = default!;
+
+    /// <summary>
+    ///     Unix timestamp in milliseconds when the item started, if recorded.
+    /// </summary>
+    [JsonPropertyName("startedAtMs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<long?> StartedAtMs { get; set; }
 
     [JsonPropertyName("summary")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

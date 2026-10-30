@@ -8,6 +8,13 @@ namespace ZYC.Codex.Protocol;
 
 public class ImageViewThreadItem : ThreadItem
 {
+    /// <summary>
+    ///     Unix timestamp in milliseconds when the item completed, if recorded.
+    /// </summary>
+    [JsonPropertyName("completedAtMs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<long?> CompletedAtMs { get; set; }
+
     [JsonPropertyName("id")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
@@ -17,6 +24,13 @@ public class ImageViewThreadItem : ThreadItem
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public string Path { get; set; } = default!;
+
+    /// <summary>
+    ///     Unix timestamp in milliseconds when the item started, if recorded.
+    /// </summary>
+    [JsonPropertyName("startedAtMs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<long?> StartedAtMs { get; set; }
 
     [JsonPropertyName("type")]
     [JsonInclude]

@@ -51,6 +51,8 @@ public class CodexErrorInfoJsonConverter : JsonConverter<CodexErrorInfo>
             return new CodexErrorInfoModelNotFound();
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "other")
             return new CodexErrorInfoOther();
+        if (root.ValueKind == JsonValueKind.String && root.GetString() == "policyCapacityUnavailable")
+            return new CodexErrorInfoPolicyCapacityUnavailable();
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "rateLimitExceeded")
             return new CodexErrorInfoRateLimitExceeded();
         if (root.ValueKind == JsonValueKind.Object && root.TryGetProperty("responseStreamConnectionFailed", out var property2))
@@ -140,6 +142,9 @@ public class CodexErrorInfoJsonConverter : JsonConverter<CodexErrorInfo>
                 break;
             case CodexErrorInfoOther concrete:
                 writer.WriteStringValue("other");
+                break;
+            case CodexErrorInfoPolicyCapacityUnavailable concrete:
+                writer.WriteStringValue("policyCapacityUnavailable");
                 break;
             case CodexErrorInfoRateLimitExceeded concrete:
                 writer.WriteStringValue("rateLimitExceeded");

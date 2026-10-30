@@ -19,6 +19,13 @@ public class ProcessExitedNotification
     public int ExitCode { get; set; } = default!;
 
     /// <summary>
+    ///     Whether output collection hit its post-exit deadline before seeing EOF or reaching the requested byte cap on either stream. Older servers omit this field.
+    /// </summary>
+    [JsonPropertyName("outputDrainTimedOut")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<bool?> OutputDrainTimedOut { get; set; }
+
+    /// <summary>
     ///     Client-supplied, connection-scoped `processHandle` from `process/spawn`.
     /// </summary>
     [JsonPropertyName("processHandle")]

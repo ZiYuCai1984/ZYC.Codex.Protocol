@@ -9,10 +9,17 @@ namespace ZYC.Codex.Protocol;
 public class HooksListParams
 {
     /// <summary>
-    ///     When empty, defaults to the current session working directory.
+    ///     Working directories to inspect when no thread is specified. An empty list uses the session cwd.
     /// </summary>
     [JsonPropertyName("cwds")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<List<string>> Cwds { get; set; }
+
+    /// <summary>
+    ///     List a loaded thread's hooks, including its selected environments. Omit `cwds` in this mode.
+    /// </summary>
+    [JsonPropertyName("threadId")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> ThreadId { get; set; }
 
 }

@@ -34,4 +34,11 @@ public class ChatgptAccount : Account
         }
     }
 
+    /// <summary>
+    ///     Display name of the selected ChatGPT workspace, when available.
+    /// </summary>
+    [JsonPropertyName("workspaceName")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> WorkspaceName { get; set; }
+
 }
