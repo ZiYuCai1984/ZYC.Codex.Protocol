@@ -56,4 +56,11 @@ public class InitializeCapabilities
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<bool> RequestAttestation { get; set; }
 
+    /// <summary>
+    ///     Present `humanCommand` approvals to a person and return only a one-time decision. Requires `experimentalApi`. Pending requests can be replayed to compatible clients.
+    /// </summary>
+    [JsonPropertyName("requiredHumanApproval")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<bool> RequiredHumanApproval { get; set; }
+
 }

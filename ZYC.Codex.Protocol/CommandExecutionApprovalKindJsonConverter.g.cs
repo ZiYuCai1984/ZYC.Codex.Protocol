@@ -12,12 +12,14 @@ public class CommandExecutionApprovalKindJsonConverter : JsonConverter<CommandEx
     private static CommandExecutionApprovalKind Parse(string? value) => value switch
     {
         "command" => CommandExecutionApprovalKind.Command,
+        "humanCommand" => CommandExecutionApprovalKind.HumanCommand,
         "writeStdin" => CommandExecutionApprovalKind.WriteStdin,
         _ => throw new JsonException("Unknown CommandExecutionApprovalKind value: " + value)
     };
     private static string Format(CommandExecutionApprovalKind value) => value switch
     {
         CommandExecutionApprovalKind.Command => "command",
+        CommandExecutionApprovalKind.HumanCommand => "humanCommand",
         CommandExecutionApprovalKind.WriteStdin => "writeStdin",
         _ => throw new JsonException("Unknown CommandExecutionApprovalKind value: " + value)
     };

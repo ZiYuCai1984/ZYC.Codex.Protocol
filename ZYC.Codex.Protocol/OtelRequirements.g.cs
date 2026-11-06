@@ -24,6 +24,10 @@ public class OtelRequirements
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<bool?> LogGuardianAssessments { get; set; }
 
+    [JsonPropertyName("log_sse_deltas")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<bool?> LogSseDeltas { get; set; }
+
     [JsonPropertyName("log_user_prompt")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<bool?> LogUserPrompt { get; set; }

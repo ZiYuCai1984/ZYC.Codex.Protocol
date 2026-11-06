@@ -24,9 +24,4 @@ public class AudioUserInput : UserInput
         }
     }
 
-    [JsonPropertyName("url")]
-    [JsonRequired]
-    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public string Url { get; set; } = default!;
-
 }

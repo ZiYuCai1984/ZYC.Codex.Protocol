@@ -12,5 +12,6 @@ namespace ZYC.Codex.Protocol;
 public enum CommandExecutionApprovalKind
 {
     Command,
+    HumanCommand,
     WriteStdin,
 }
