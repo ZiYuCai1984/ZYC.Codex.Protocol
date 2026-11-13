@@ -16,6 +16,13 @@ public class ThreadListParams
     public Optional<bool?> Archived { get; set; }
 
     /// <summary>
+    ///     Show local history visible to the current ChatGPT account. Defaults to false.
+    /// </summary>
+    [JsonPropertyName("currentAccountOnly")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<bool> CurrentAccountOnly { get; set; }
+
+    /// <summary>
     ///     Opaque pagination cursor returned by a previous call.
     /// </summary>
     [JsonPropertyName("cursor")]

@@ -70,6 +70,8 @@ public class ClientRequestJsonConverter : JsonConverter<ClientRequest>
             "mcpServerStatus/list" => root.Deserialize<McpServerStatusListRequest>(options) ?? throw new JsonException("Expected McpServerStatusListRequest."),
             "model/list" => root.Deserialize<ModelListRequest>(options) ?? throw new JsonException("Expected ModelListRequest."),
             "modelProvider/capabilities/read" => root.Deserialize<ModelProviderCapabilitiesReadRequest>(options) ?? throw new JsonException("Expected ModelProviderCapabilitiesReadRequest."),
+            "modelProvider/config/write" => root.Deserialize<ModelProviderConfigWriteRequest>(options) ?? throw new JsonException("Expected ModelProviderConfigWriteRequest."),
+            "modelProvider/list" => root.Deserialize<ModelProviderListRequest>(options) ?? throw new JsonException("Expected ModelProviderListRequest."),
             "permissionProfile/list" => root.Deserialize<PermissionProfileListRequest>(options) ?? throw new JsonException("Expected PermissionProfileListRequest."),
             "plugin/install" => root.Deserialize<PluginInstallRequest>(options) ?? throw new JsonException("Expected PluginInstallRequest."),
             "plugin/installed" => root.Deserialize<PluginInstalledRequest>(options) ?? throw new JsonException("Expected PluginInstalledRequest."),
@@ -288,6 +290,12 @@ public class ClientRequestJsonConverter : JsonConverter<ClientRequest>
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
             case ModelProviderCapabilitiesReadRequest concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
+            case ModelProviderConfigWriteRequest concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
+            case ModelProviderListRequest concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
             case PermissionProfileListRequest concrete:

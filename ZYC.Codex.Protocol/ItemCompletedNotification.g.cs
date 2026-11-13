@@ -15,6 +15,13 @@ public class ItemCompletedNotification
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public long CompletedAtMs { get; set; } = default!;
 
+    /// <summary>
+    ///     Native content tokens for the completed assistant message, including a sampled footer. Null when unavailable. Completion telemetry is not part of the stored thread item.
+    /// </summary>
+    [JsonPropertyName("contentTokenCount")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<ulong?> ContentTokenCount { get; set; }
+
     [JsonPropertyName("item")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]

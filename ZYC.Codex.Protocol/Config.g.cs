@@ -28,6 +28,13 @@ public class Config
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<BrowserUseConfig?> BrowserUse { get; set; }
 
+    /// <summary>
+    ///     Effective tools.client_search_provider hint. Model-selected providers take precedence.
+    /// </summary>
+    [JsonPropertyName("client_search_provider")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<WebSearchProvider?> ClientSearchProvider { get; set; }
+
     [JsonPropertyName("compact_prompt")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> CompactPrompt { get; set; }

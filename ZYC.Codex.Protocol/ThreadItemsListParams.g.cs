@@ -15,6 +15,13 @@ public class ThreadItemsListParams
     public Optional<ThreadItemsListCursor?> Cursor { get; set; }
 
     /// <summary>
+    ///     For a single turn, choose which saved outputs to fetch separately by item ID.
+    /// </summary>
+    [JsonPropertyName("deferOutput")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<ThreadItemOutputDeferral?> DeferOutput { get; set; }
+
+    /// <summary>
     ///     Optional item page size.
     /// </summary>
     [JsonPropertyName("limit")]
