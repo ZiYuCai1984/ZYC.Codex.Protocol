@@ -26,6 +26,7 @@ public class ClientRequestJsonConverter : JsonConverter<ClientRequest>
             "account/rateLimitResetCredit/consume" => root.Deserialize<AccountRateLimitResetCreditConsumeRequest>(options) ?? throw new JsonException("Expected AccountRateLimitResetCreditConsumeRequest."),
             "account/rateLimits/read" => root.Deserialize<AccountRateLimitsReadRequest>(options) ?? throw new JsonException("Expected AccountRateLimitsReadRequest."),
             "account/read" => root.Deserialize<AccountReadRequest>(options) ?? throw new JsonException("Expected AccountReadRequest."),
+            "account/securitySetup/read" => root.Deserialize<AccountSecuritySetupReadRequest>(options) ?? throw new JsonException("Expected AccountSecuritySetupReadRequest."),
             "account/sendAddCreditsNudgeEmail" => root.Deserialize<AccountSendAddCreditsNudgeEmailRequest>(options) ?? throw new JsonException("Expected AccountSendAddCreditsNudgeEmailRequest."),
             "account/usage/read" => root.Deserialize<AccountUsageReadRequest>(options) ?? throw new JsonException("Expected AccountUsageReadRequest."),
             "account/workspaceMessages/read" => root.Deserialize<AccountWorkspaceMessagesReadRequest>(options) ?? throw new JsonException("Expected AccountWorkspaceMessagesReadRequest."),
@@ -158,6 +159,9 @@ public class ClientRequestJsonConverter : JsonConverter<ClientRequest>
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
             case AccountReadRequest concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
+            case AccountSecuritySetupReadRequest concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
             case AccountSendAddCreditsNudgeEmailRequest concrete:

@@ -29,6 +29,10 @@ public class AgentMessageThreadItem : ThreadItem
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<MemoryCitation?> MemoryCitation { get; set; }
 
+    [JsonPropertyName("moderation")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<AgentMessageModeration?> Moderation { get; set; }
+
     [JsonPropertyName("phase")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<MessagePhase?> Phase { get; set; }

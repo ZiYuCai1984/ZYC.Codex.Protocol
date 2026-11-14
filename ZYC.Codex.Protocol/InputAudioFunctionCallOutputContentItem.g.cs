@@ -6,13 +6,11 @@ using System.Text.Json.Serialization;
 
 namespace ZYC.Codex.Protocol;
 
+/// <summary>
+///     Inline audio data or an uploaded file loaded by the Responses API.
+/// </summary>
 public class InputAudioFunctionCallOutputContentItem : FunctionCallOutputContentItem
 {
-    [JsonPropertyName("audio_url")]
-    [JsonRequired]
-    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public string AudioUrl { get; set; } = default!;
-
     [JsonPropertyName("type")]
     [JsonInclude]
     [JsonRequired]

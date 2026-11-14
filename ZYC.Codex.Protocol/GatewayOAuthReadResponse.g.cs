@@ -39,4 +39,11 @@ public class GatewayOAuthReadResponse
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<GatewayOAuthStatus?> Status { get; set; }
 
+    /// <summary>
+    ///     Whether the administrator configured a device authorization endpoint.
+    /// </summary>
+    [JsonPropertyName("supportsDeviceAuth")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<bool> SupportsDeviceAuth { get; set; }
+
 }

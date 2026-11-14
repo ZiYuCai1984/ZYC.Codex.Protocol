@@ -16,4 +16,11 @@ public class GetAccountResponse
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public bool RequiresOpenaiAuth { get; set; } = default!;
 
+    /// <summary>
+    ///     ChatGPT user ID belonging to this account response, when available.
+    /// </summary>
+    [JsonPropertyName("userId")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> UserId { get; set; }
+
 }

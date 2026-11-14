@@ -18,6 +18,13 @@ public class GatewayOAuthChangedNotification
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> Error { get; set; }
 
+    /// <summary>
+    ///     Identifies the completed device login attempt.
+    /// </summary>
+    [JsonPropertyName("loginId")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> LoginId { get; set; }
+
     [JsonPropertyName("providerId")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]

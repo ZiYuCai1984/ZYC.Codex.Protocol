@@ -23,4 +23,11 @@ public class QueuedSubmission
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public List<UserInput> Input { get; set; } = default!;
 
+    /// <summary>
+    ///     Metadata retained with this input, including across reconnect and restoration.
+    /// </summary>
+    [JsonPropertyName("responsesapiClientMetadata")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<Dictionary<string, string>?> ResponsesapiClientMetadata { get; set; }
+
 }

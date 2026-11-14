@@ -31,6 +31,6 @@ public class AccountGatewayOAuthReadRequest : ClientRequest
 
     [JsonPropertyName("params")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public Optional<ProtocolNull?> Params { get; set; }
+    public Optional<GatewayOAuthReadParams?> Params { get; set; }
 
 }

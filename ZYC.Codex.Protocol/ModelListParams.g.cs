@@ -28,4 +28,11 @@ public class ModelListParams
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<uint?> Limit { get; set; }
 
+    /// <summary>
+    ///     List models for this configured provider instead of the app-server default.
+    /// </summary>
+    [JsonPropertyName("modelProvider")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> ModelProvider { get; set; }
+
 }

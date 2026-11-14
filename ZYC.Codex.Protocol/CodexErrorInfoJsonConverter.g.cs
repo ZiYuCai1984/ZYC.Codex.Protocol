@@ -43,6 +43,8 @@ public class CodexErrorInfoJsonConverter : JsonConverter<CodexErrorInfo>
                 // The schema's open anyOf branch also accepts this value.
             }
         }
+        if (root.ValueKind == JsonValueKind.String && root.GetString() == "inferenceHookDenied")
+            return new CodexErrorInfoInferenceHookDenied();
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "internalServerError")
             return new CodexErrorInfoInternalServerError();
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "misalignmentPolicyViolation")
@@ -130,6 +132,9 @@ public class CodexErrorInfoJsonConverter : JsonConverter<CodexErrorInfo>
                 break;
             case HttpConnectionFailedCodexErrorInfo concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
+                break;
+            case CodexErrorInfoInferenceHookDenied concrete:
+                writer.WriteStringValue("inferenceHookDenied");
                 break;
             case CodexErrorInfoInternalServerError concrete:
                 writer.WriteStringValue("internalServerError");

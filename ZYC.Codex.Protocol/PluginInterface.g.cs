@@ -36,7 +36,7 @@ public class PluginInterface
     public Optional<string?> ComposerIconUrl { get; set; }
 
     /// <summary>
-    ///     Starter prompts for the plugin. Capped at 3 entries with a maximum of 128 characters per entry.
+    ///     Starter prompts for the plugin. Capped at 3 entries with a maximum of 512 characters per entry.
     /// </summary>
     [JsonPropertyName("defaultPrompt")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
