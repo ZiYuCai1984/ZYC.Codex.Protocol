@@ -5,4 +5,5 @@ public record UnionTypeModel(
     string? DiscriminatorProperty,
     IReadOnlyList<UnionMemberModel> Members,
     string? Description = null,
-    bool HasValueSemantics = false) : TypeModel(Name, Description);
+    bool HasValueSemantics = false,
+    IReadOnlyList<PropertyModel>? BaseProperties = null) : TypeModel(Name, Description);

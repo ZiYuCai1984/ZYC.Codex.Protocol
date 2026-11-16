@@ -37,10 +37,10 @@ Import the `ZYC.Codex.Protocol` namespace to use the protocol types. JSON conver
 | Component | Version |
 | --- | --- |
 | Codex CLI / schema | [0.169.0](https://www.npmjs.com/package/@openai/codex/v/0.169.0) |
-| NuGet package | [1.0.0-0.169.0](https://www.nuget.org/packages/ZYC.Codex.Protocol/1.0.0-0.169.0) |
+| NuGet package | [1.0.1-0.169.0](https://www.nuget.org/packages/ZYC.Codex.Protocol/1.0.1-0.169.0) |
 <!-- codex-version:end -->
 
-Automated packages follow the Generator's `ProductInfo.Version` expression. The current `1.0.0-{CodexVersion}` template produces versions such as `1.0.0-0.164.0`. The Codex CLI version identifies the schema exported by that CLI, as described in the [app-server documentation](https://developers.openai.com/codex/app-server). `ProductInfo.Version` exposes the full package version and `ProductInfo.CodexVersion` exposes the pinned upstream version (empty for the original untracked snapshot).
+Automated packages follow the Generator's `ProductInfo.Version` expression. The current `1.0.1-{CodexVersion}` template produces versions such as `1.0.1-0.169.0`. The Codex CLI version identifies the schema exported by that CLI, as described in the [app-server documentation](https://developers.openai.com/codex/app-server). `ProductInfo.Version` exposes the full package version and `ProductInfo.CodexVersion` exposes the pinned upstream version (empty for the original untracked snapshot).
 
 The suffix is a NuGet prerelease identifier, so enable prerelease packages when installing or updating, or select the exact version from the table. The library base is maintained manually in the Generator's `ProductInfo.Version`. Build metadata such as `+codex.0.114.0` cannot distinguish package versions because [NuGet removes it during version normalization](https://learn.microsoft.com/en-us/nuget/concepts/package-versioning#normalized-version-numbers).
 
@@ -96,6 +96,14 @@ string json = JsonSerializer.Serialize(request);
 ```
 
 Fixed fields such as `Method` and `Type` are defined by the concrete type and do not need to be assigned. Supply the required data when constructing a request. These examples produce JSON; your application must establish a connection and complete initialization before sending messages.
+
+`ClientRequest` also declares abstract `Id` and `Method` members. Code that only holds the base type, such as a transport that assigns request IDs, can set the ID and read the method without knowing the concrete request:
+
+```csharp
+ClientRequest request = new ThreadStartRequest { Params = new ThreadStartParams() };
+request.Id = 2L;                   // Assigned through the base type.
+Console.WriteLine(request.Method); // thread/start
+```
 
 ## Parsing Messages
 

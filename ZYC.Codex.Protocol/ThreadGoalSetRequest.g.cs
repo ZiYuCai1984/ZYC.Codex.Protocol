@@ -11,16 +11,19 @@ public class ThreadGoalSetRequest : ClientRequest
     [JsonPropertyName("id")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public RequestId Id { get; set; } = default!;
+    public override RequestId Id { get; set; } = default!;
+
+    [JsonIgnore]
+    public override string Method => "thread/goal/set";
 
     [JsonPropertyName("method")]
     [JsonInclude]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public string Method
+    private string MethodValue
     {
         get => "thread/goal/set";
-        private set
+        set
         {
             if (value != "thread/goal/set")
             {

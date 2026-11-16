@@ -10,7 +10,7 @@ public static class ProductInfo
 
     public static string Author => "tomoko";
 
-    public static string Version => $"1.0.0-{CodexVersion}";
+    public static string Version => $"1.0.1-{CodexVersion}";
 
     public static string CodexVersion => "__CODEX_VERSION__";
 }

@@ -79,6 +79,7 @@ public class CSharpGenerator
                     break;
                 case UnionTypeModel union:
                     Add(union.Name, w => CSharpUnionWriter.Base(w, union),
+                        (union.BaseProperties ?? []).Where(p => p.Constant == null).Select(p => p.Type),
                         additionalImports: union.HasValueSemantics ? ["System", "System.Collections.Generic"] : null);
                     Add(union.Name + "JsonConverter", w => CSharpConverterWriter.Union(w, union),
                         union.Members.Where(m => m.Payload != null).Select(m => m.Payload!), true);

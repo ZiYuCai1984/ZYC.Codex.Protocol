@@ -147,7 +147,8 @@ public class SchemaAnalyzer
             CSharpNaming.Unique(CSharpNaming.EnumMemberName(value), scope), value)).ToList(), description);
     }
 
-    internal ObjectTypeModel Object(JsonSchema schema, string name, string? baseType = null, JsonSchema? common = null)
+    internal ObjectTypeModel Object(JsonSchema schema, string name, string? baseType = null, JsonSchema? common = null,
+        IReadOnlyCollection<string>? overrides = null)
     {
         var properties = Properties(schema).ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
         if (common != null)
@@ -185,7 +186,7 @@ public class SchemaAnalyzer
             var constant = isRequired && type.Kind != TypeKind.Nullable &&
                            UnionAnalyzer.StringValues(p.ActualSchema) is [var only] ? only : null;
             result.Add(new PropertyModel(jsonName, CSharpNaming.Unique(CSharpNaming.PropertyName(jsonName), scope),
-                type, isRequired, p.Description, constant));
+                type, isRequired, p.Description, constant, overrides?.Contains(jsonName) == true));
         }
 
         if (required.Except(properties.Keys).FirstOrDefault() is { } missing)
@@ -205,6 +206,25 @@ public class SchemaAnalyzer
                         (source.Json["additionalProperties"]?.Type == JTokenType.Boolean || preserveShapeExtras)
             ? CSharpNaming.Unique("AdditionalProperties", scope)
             : null;
+
+        // Private members are named last so they never displace a public member name.
+        foreach (var jsonName in overrides ?? [])
+        {
+            var index = result.FindIndex(p => p.JsonName == jsonName);
+            if (index < 0 || !result[index].Required)
+            {
+                throw Document.Unsupported(schema, $"Base member {jsonName} must be a required property of {name}.");
+            }
+
+            if (result[index].Constant != null)
+            {
+                result[index] = result[index] with
+                {
+                    ConstantMemberName = CSharpNaming.Unique(result[index].CSharpName + "Value", scope)
+                };
+            }
+        }
+
         return new ObjectTypeModel(name, result, schema.Description, baseType, extension,
             !schema.AllowAdditionalProperties);
     }
