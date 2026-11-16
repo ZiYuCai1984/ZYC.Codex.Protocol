@@ -11,16 +11,19 @@ public class PluginShareDeleteRequest : ClientRequest
     [JsonPropertyName("id")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public RequestId Id { get; set; } = default!;
+    public override RequestId Id { get; set; } = default!;
+
+    [JsonIgnore]
+    public override string Method => "plugin/share/delete";
 
     [JsonPropertyName("method")]
     [JsonInclude]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public string Method
+    private string MethodValue
     {
         get => "plugin/share/delete";
-        private set
+        set
         {
             if (value != "plugin/share/delete")
             {

@@ -11,16 +11,19 @@ public class HooksListRequest : ClientRequest
     [JsonPropertyName("id")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public RequestId Id { get; set; } = default!;
+    public override RequestId Id { get; set; } = default!;
+
+    [JsonIgnore]
+    public override string Method => "hooks/list";
 
     [JsonPropertyName("method")]
     [JsonInclude]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public string Method
+    private string MethodValue
     {
         get => "hooks/list";
-        private set
+        set
         {
             if (value != "hooks/list")
             {

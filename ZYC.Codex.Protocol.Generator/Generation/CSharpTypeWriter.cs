@@ -55,38 +55,24 @@ public static class CSharpTypeWriter
             foreach (var p in model.Properties)
             {
                 writer.Summary(p.Description);
-                writer.Line($"[JsonPropertyName({CodeWriter.Literal(p.JsonName)})]");
-                if (p.Constant is { } constant)
+                if (p is { IsOverride: true, Constant: { } overridden, ConstantMemberName: { } member })
                 {
-                    writer.Line("[JsonInclude]");
-                    writer.Line("[JsonRequired]");
-                    writer.Line("[JsonIgnore(Condition = JsonIgnoreCondition.Never)]");
-                    writer.Line($"public string {p.CSharpName}");
-                    writer.Line("{");
-                    using (writer.Indent())
-                    {
-                        writer.Line($"get => {CodeWriter.Literal(constant)};");
-                        writer.Line("private set");
-                        writer.Line("{");
-                        using (writer.Indent())
-                        {
-                            writer.Line($"if (value != {CodeWriter.Literal(constant)})");
-                            writer.Line("{");
-                            using (writer.Indent())
-                            {
-                                writer.Line($"throw new JsonException({CodeWriter.Literal($"Expected {model.Name}.{p.JsonName} to be {constant}.")});");
-                            }
-
-                            writer.Line("}");
-                        }
-
-                        writer.Line("}");
-                    }
-
-                    writer.Line("}");
+                    // An override cannot add the setter that the get-only base member lacks, so a private
+                    // property carries the JSON value and keeps the deserialization check.
+                    writer.Line("[JsonIgnore]");
+                    writer.Line($"public override string {p.CSharpName} => {CodeWriter.Literal(overridden)};");
+                    writer.Line();
+                    writer.Line($"[JsonPropertyName({CodeWriter.Literal(p.JsonName)})]");
+                    ConstantProperty(writer, model, p, $"private string {member}", "set");
+                }
+                else if (p.Constant != null)
+                {
+                    writer.Line($"[JsonPropertyName({CodeWriter.Literal(p.JsonName)})]");
+                    ConstantProperty(writer, model, p, $"public string {p.CSharpName}", "private set");
                 }
                 else
                 {
+                    writer.Line($"[JsonPropertyName({CodeWriter.Literal(p.JsonName)})]");
                     if (!p.Required)
                     {
                         writer.Line("[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]");
@@ -99,7 +85,7 @@ public static class CSharpTypeWriter
 
                     var propertyType = p.Required ? Type(p.Type) : $"Optional<{Type(p.Type)}>";
                     writer.Line(
-                        $"public {propertyType} {p.CSharpName} {{ get; set; }}{(p.Required ? " = default!;" : "")}");
+                        $"public {(p.IsOverride ? "override " : "")}{propertyType} {p.CSharpName} {{ get; set; }}{(p.Required ? " = default!;" : "")}");
                 }
 
                 writer.Line();
@@ -110,6 +96,38 @@ public static class CSharpTypeWriter
                 writer.Line("[JsonExtensionData]");
                 writer.Line($"public Dictionary<string, JsonElement>? {extension} {{ get; set; }}");
             }
+        }
+
+        writer.Line("}");
+    }
+
+    private static void ConstantProperty(CodeWriter writer, ObjectTypeModel model, PropertyModel p,
+        string declaration, string setter)
+    {
+        var constant = p.Constant!;
+        writer.Line("[JsonInclude]");
+        writer.Line("[JsonRequired]");
+        writer.Line("[JsonIgnore(Condition = JsonIgnoreCondition.Never)]");
+        writer.Line(declaration);
+        writer.Line("{");
+        using (writer.Indent())
+        {
+            writer.Line($"get => {CodeWriter.Literal(constant)};");
+            writer.Line(setter);
+            writer.Line("{");
+            using (writer.Indent())
+            {
+                writer.Line($"if (value != {CodeWriter.Literal(constant)})");
+                writer.Line("{");
+                using (writer.Indent())
+                {
+                    writer.Line($"throw new JsonException({CodeWriter.Literal($"Expected {model.Name}.{p.JsonName} to be {constant}.")});");
+                }
+
+                writer.Line("}");
+            }
+
+            writer.Line("}");
         }
 
         writer.Line("}");

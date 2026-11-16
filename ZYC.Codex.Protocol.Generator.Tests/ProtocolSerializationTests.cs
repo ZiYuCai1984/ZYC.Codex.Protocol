@@ -43,6 +43,22 @@ public class ProtocolSerializationTests
         Assert.Equal("""{"id":4,"method":"thread/start","params":{}}""", JsonSerializer.Serialize(created));
     }
 
+    [Fact]
+    public void ClientRequestBaseExposesIdAndMethodWithoutDuplicatingThemOnTheWire()
+    {
+        ClientRequest request = new ThreadStartRequest { Params = new ThreadStartParams() };
+        request.Id = 5L;
+        Assert.Equal("thread/start", request.Method);
+        Assert.Equal("""{"id":5,"method":"thread/start","params":{}}""", JsonSerializer.Serialize(request));
+        Assert.Equal("""{"id":5,"method":"thread/start","params":{}}""",
+            JsonSerializer.Serialize((ThreadStartRequest)request));
+
+        var parsed = JsonSerializer.Deserialize<ClientRequest>(
+            """{"id":"init-1","method":"initialize","params":{"clientInfo":{"name":"test","version":"1.0"}}}""")!;
+        Assert.Equal("initialize", parsed.Method);
+        Assert.Equal((RequestId)"init-1", parsed.Id);
+    }
+
     [Theory]
     [InlineData("{}")]
     [InlineData("[]")]

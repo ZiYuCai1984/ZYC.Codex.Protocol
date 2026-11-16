@@ -11,16 +11,19 @@ public class AccountRateLimitResetCreditConsumeRequest : ClientRequest
     [JsonPropertyName("id")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public RequestId Id { get; set; } = default!;
+    public override RequestId Id { get; set; } = default!;
+
+    [JsonIgnore]
+    public override string Method => "account/rateLimitResetCredit/consume";
 
     [JsonPropertyName("method")]
     [JsonInclude]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public string Method
+    private string MethodValue
     {
         get => "account/rateLimitResetCredit/consume";
-        private set
+        set
         {
             if (value != "account/rateLimitResetCredit/consume")
             {

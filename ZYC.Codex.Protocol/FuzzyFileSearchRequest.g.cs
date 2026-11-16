@@ -11,16 +11,19 @@ public class FuzzyFileSearchRequest : ClientRequest
     [JsonPropertyName("id")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public RequestId Id { get; set; } = default!;
+    public override RequestId Id { get; set; } = default!;
+
+    [JsonIgnore]
+    public override string Method => "fuzzyFileSearch";
 
     [JsonPropertyName("method")]
     [JsonInclude]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public string Method
+    private string MethodValue
     {
         get => "fuzzyFileSearch";
-        private set
+        set
         {
             if (value != "fuzzyFileSearch")
             {

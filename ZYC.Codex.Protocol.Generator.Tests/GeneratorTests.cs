@@ -45,9 +45,63 @@ public class GeneratorTests
         }
 
         Assert.Contains("public abstract class ClientRequest", first["ClientRequest.g.cs"]);
-        Assert.Contains("public RequestId Id { get; set; }", first["InitializeRequest.g.cs"]);
+        Assert.Contains("[JsonIgnore]\n    public abstract RequestId Id { get; set; }", first["ClientRequest.g.cs"]);
+        Assert.Contains("[JsonIgnore]\n    public abstract string Method { get; }", first["ClientRequest.g.cs"]);
+        Assert.Contains("public override RequestId Id { get; set; }", first["InitializeRequest.g.cs"]);
+        Assert.Contains("public override string Method => \"initialize\";", first["InitializeRequest.g.cs"]);
+        Assert.DoesNotContain("public abstract RequestId Id", first["ServerRequest.g.cs"]);
         Assert.Contains("public string Token { get; set; }", first["AttestationGenerateResponse.g.cs"]);
         Assert.DoesNotContain("V2RequestId.g.cs", first.Keys);
+    }
+
+    [Fact]
+    public async Task ClientRequestBaseDeclaresAbstractIdAndMethodOverriddenByBranchesAsync()
+    {
+        // The second branch owns a public "MethodValue", so the private wire member must take another name.
+        var models = await Analyze(ClientRequestFixture(
+            """{"id":{"$ref":"#/definitions/RequestId"},"method":{"type":"string","enum":["alias"]},"methodValue":{"type":"string"}}""",
+            """["id","method"]"""));
+        var union = Assert.IsType<UnionTypeModel>(models.Single(m => m.Name == "ClientRequest"));
+        Assert.Equal(new[] { "id", "method" }, union.BaseProperties!.Select(p => p.JsonName));
+
+        var files = new CSharpGenerator().Generate(models);
+        var baseCode = files["ClientRequest.g.cs"];
+        Assert.Contains("[JsonIgnore]\n    public abstract RequestId Id { get; set; }", baseCode);
+        Assert.Contains("[JsonIgnore]\n    public abstract string Method { get; }", baseCode);
+
+        var ping = files["PingRequest.g.cs"];
+        Assert.Contains("public override RequestId Id { get; set; } = default!;", ping);
+        Assert.Contains("[JsonIgnore]\n    public override string Method => \"ping\";", ping);
+        Assert.Contains(
+            "[JsonPropertyName(\"method\")]\n    [JsonInclude]\n    [JsonRequired]\n    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]\n    private string MethodValue\n",
+            ping);
+        Assert.Contains("throw new JsonException(\"Expected PingRequest.method to be ping.\");", ping);
+
+        var alias = files["AliasRequest.g.cs"];
+        Assert.Contains("public Optional<string> MethodValue { get; set; }", alias);
+        Assert.Contains("private string MethodValue2", alias);
+    }
+
+    [Theory]
+    [InlineData("""{"method":{"type":"string","enum":["alias"]}}""", """["method"]""", "must be a required property")]
+    [InlineData("""{"id":{"$ref":"#/definitions/RequestId"},"method":{"type":"string","enum":["alias"]}}""", """["method"]""", "must be a required property")]
+    [InlineData("""{"id":{"type":"string"},"method":{"type":"string","enum":["alias"]}}""", """["id","method"]""", "is not declared identically")]
+    public async Task ClientRequestBaseMembersMustBeSharedByEveryBranchAsync(string properties, string required, string reason)
+    {
+        var exception = await Assert.ThrowsAsync<NotSupportedException>(() =>
+            Analyze(ClientRequestFixture(properties, required)));
+        Assert.Contains(reason, exception.Message);
+    }
+
+    private static string ClientRequestFixture(string secondBranchProperties, string secondBranchRequired)
+    {
+        return
+            "{\"definitions\":{" +
+            "\"RequestId\":{\"anyOf\":[{\"type\":\"string\"},{\"type\":\"integer\",\"format\":\"int64\"}]}," +
+            "\"ClientRequest\":{\"oneOf\":[" +
+            "{\"title\":\"PingRequest\",\"type\":\"object\",\"properties\":{\"id\":{\"$ref\":\"#/definitions/RequestId\"},\"method\":{\"type\":\"string\",\"enum\":[\"ping\"]}},\"required\":[\"id\",\"method\"]}," +
+            "{\"title\":\"AliasRequest\",\"type\":\"object\",\"properties\":" + secondBranchProperties + ",\"required\":" + secondBranchRequired + "}" +
+            "]}}}";
     }
 
     [Fact]

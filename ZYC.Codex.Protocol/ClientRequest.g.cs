@@ -12,4 +12,10 @@ namespace ZYC.Codex.Protocol;
 public abstract class ClientRequest
 {
     private protected ClientRequest() { }
+
+    [JsonIgnore]
+    public abstract RequestId Id { get; set; }
+
+    [JsonIgnore]
+    public abstract string Method { get; }
 }

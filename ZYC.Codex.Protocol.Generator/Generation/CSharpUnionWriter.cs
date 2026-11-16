@@ -14,6 +14,18 @@ internal static class CSharpUnionWriter
         using (writer.Indent())
         {
             writer.Line($"private protected {model.Name}() {{ }}");
+            foreach (var p in model.BaseProperties ?? [])
+            {
+                writer.Line();
+                writer.Summary(p.Description);
+                // Concrete branches carry the JSON attributes. Without [JsonIgnore] the serializer would also emit
+                // the abstract declaration under its CLR name (for example "Id" next to "id").
+                writer.Line("[JsonIgnore]");
+                writer.Line(p.Constant != null
+                    ? $"public abstract string {p.CSharpName} {{ get; }}"
+                    : $"public abstract {CSharpTypeWriter.Type(p.Type)} {p.CSharpName} {{ get; set; }}");
+            }
+
             foreach (var m in model.Members.Where(m => m.Payload?.Kind == TypeKind.Primitive))
             {
                 writer.Line(

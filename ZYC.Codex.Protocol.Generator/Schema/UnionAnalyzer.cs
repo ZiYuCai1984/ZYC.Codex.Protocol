@@ -72,16 +72,21 @@ internal class UnionAnalyzer
                     throw Analyzer.Document.Unsupported(schema, $"Duplicate discriminator '{discriminator}'.");
                 }
 
+                var baseMembers = UnionBaseMemberRules.For(Analyzer.Document.Source(schema).Owner);
                 return Analyzer.Declare(schema, name =>
                 {
+                    var branches = new List<ObjectTypeModel>();
                     var members = actual.Zip(values).OrderBy(x => x.Second, StringComparer.Ordinal).Select(pair =>
                     {
                         var branchName = Analyzer.Allocate(pair.First.Title ?? name + "_" + pair.Second);
-                        Analyzer.Add(Analyzer.Object(pair.First, branchName, name, schema));
+                        var branch = Analyzer.Object(pair.First, branchName, name, schema, baseMembers);
+                        Analyzer.Add(branch);
+                        branches.Add(branch);
                         return new UnionMemberModel(branchName, pair.Second, JsonValueKind.Object,
                             [new PropertyMatch([discriminator], [pair.Second])]);
                     }).ToList();
-                    return new UnionTypeModel(name, discriminator, members, schema.Description);
+                    return new UnionTypeModel(name, discriminator, members, schema.Description,
+                        BaseProperties: BaseProperties(schema, name, baseMembers, branches));
                 });
             }
         }
@@ -136,6 +141,29 @@ internal class UnionAnalyzer
         }
 
         return new ProtocolUnionRules(Analyzer).Resolve(schema, actual);
+    }
+
+    // One abstract declaration must fit every override, so each branch has to declare the member identically.
+    private List<PropertyModel> BaseProperties(JsonSchema schema, string name,
+        IReadOnlyCollection<string> baseMembers, IReadOnlyList<ObjectTypeModel> branches)
+    {
+        var result = new List<PropertyModel>();
+        foreach (var jsonName in baseMembers)
+        {
+            var declarations = branches.Select(b => b.Properties.Single(p => p.JsonName == jsonName)).ToList();
+            var first = declarations[0];
+            if (declarations.Any(p => p.CSharpName != first.CSharpName || p.Type != first.Type ||
+                                      (p.Constant == null) != (first.Constant == null)))
+            {
+                throw Analyzer.Document.Unsupported(schema,
+                    $"Base member {jsonName} is not declared identically by every branch of {name}.");
+            }
+
+            // The base only needs the shape; a non-null Constant marks a get-only discriminator.
+            result.Add(first with { Description = null, IsOverride = false, ConstantMemberName = null });
+        }
+
+        return result;
     }
 
     private bool IsErrorInfoFallback(JsonSchema schema)
