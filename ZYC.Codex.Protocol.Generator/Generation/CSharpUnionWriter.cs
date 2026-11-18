@@ -22,7 +22,7 @@ internal static class CSharpUnionWriter
                 // the abstract declaration under its CLR name (for example "Id" next to "id").
                 writer.Line("[JsonIgnore]");
                 writer.Line(p.Constant != null
-                    ? $"public abstract string {p.CSharpName} {{ get; }}"
+                    ? $"public abstract {CSharpTypeWriter.Type(p.Type)} {p.CSharpName} {{ get; }}"
                     : $"public abstract {CSharpTypeWriter.Type(p.Type)} {p.CSharpName} {{ get; set; }}");
             }
 

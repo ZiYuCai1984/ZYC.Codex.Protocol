@@ -183,8 +183,11 @@ public class SchemaAnalyzer
             }
 
             var isRequired = required.Contains(jsonName);
-            var constant = isRequired && type.Kind != TypeKind.Nullable &&
-                           UnionAnalyzer.StringValues(p.ActualSchema) is [var only] ? only : null;
+            var constant = isRequired && type.Kind != TypeKind.Nullable
+                ? UnionAnalyzer.StringValues(p.ActualSchema) is [var only]
+                    ? only
+                    : Resolver.IntegerConstant(p.ActualSchema)
+                : null;
             result.Add(new PropertyModel(jsonName, CSharpNaming.Unique(CSharpNaming.PropertyName(jsonName), scope),
                 type, isRequired, p.Description, constant, overrides?.Contains(jsonName) == true));
         }

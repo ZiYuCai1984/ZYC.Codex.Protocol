@@ -358,6 +358,7 @@ public class GeneratorTests
     [Theory]
     [InlineData("integer", "int32", "int")]
     [InlineData("integer", "int64", "long")]
+    [InlineData("integer", "uint8", "byte")]
     [InlineData("integer", "uint16", "ushort")]
     [InlineData("integer", "uint32", "uint")]
     [InlineData("integer", "uint64", "ulong")]
@@ -373,6 +374,52 @@ public class GeneratorTests
                 """{"title":"Formatted","type":"object","properties":{"value":{"type":"TYPE","format":"FORMAT"}},"required":["value"]}"""
                     .Replace("TYPE", type).Replace("FORMAT", format));
         Assert.Equal(expected, Assert.IsType<ObjectTypeModel>(Assert.Single(models)).Properties.Single().Type.Name);
+    }
+
+    [Theory]
+    [InlineData("""{"enum":[1],"format":"uint8","minimum":0.0,"type":"integer"}""")]
+    [InlineData("""{"$ref":"#/definitions/Version"}""")]
+    public async Task RequiredSingleValueIntegerEnumGeneratesFixedNumberAsync(string property)
+    {
+        var models = await Analyze(
+            """{"definitions":{"Version":{"enum":[1],"format":"uint8","minimum":0.0,"type":"integer"},"Versioned":{"type":"object","properties":{"version":PROPERTY},"required":["version"]}}}"""
+                .Replace("PROPERTY", property));
+        var version = models.OfType<ObjectTypeModel>().Single(m => m.Name == "Versioned").Properties.Single();
+        Assert.Equal(TypeKind.Primitive, version.Type.Kind);
+        Assert.Equal("byte", version.Type.Name);
+        Assert.Equal("1", version.Constant);
+
+        var code = new CSharpGenerator().Generate(models)["Versioned.g.cs"];
+        Assert.Contains("public byte Version", code);
+        Assert.Contains("get => 1;", code);
+        Assert.Contains("if (value != 1)", code);
+        Assert.Contains("""throw new JsonException("Expected Versioned.version to be 1.");""", code);
+    }
+
+    [Fact]
+    public async Task OptionalSingleValueIntegerEnumDegradesToIntegerPrimitiveAsync()
+    {
+        var models = await Analyze(
+            """{"definitions":{"Versioned":{"type":"object","properties":{"version":{"enum":[1],"format":"uint8","type":"integer"}}}}}""");
+        var version = models.OfType<ObjectTypeModel>().Single(m => m.Name == "Versioned").Properties.Single();
+        Assert.Equal("byte", version.Type.Name);
+        Assert.Null(version.Constant);
+        Assert.Contains("public Optional<byte> Version { get; set; }",
+            new CSharpGenerator().Generate(models)["Versioned.g.cs"]);
+    }
+
+    [Theory]
+    [InlineData("""{"enum":[1,2],"type":"integer"}""")]
+    [InlineData("""{"enum":["1"],"type":"integer"}""")]
+    [InlineData("""{"enum":[1.5],"type":"integer"}""")]
+    [InlineData("""{"enum":[1],"type":["integer","null"]}""")]
+    [InlineData("""{"enum":[1]}""")]
+    [InlineData("""{"enum":[1.5],"type":"number"}""")]
+    public async Task OtherNonStringEnumsRemainUnsupportedAsync(string property)
+    {
+        var schema = """{"definitions":{"Versioned":{"type":"object","properties":{"version":PROPERTY},"required":["version"]}}}"""
+            .Replace("PROPERTY", property);
+        await Assert.ThrowsAsync<NotSupportedException>(() => Analyze(schema));
     }
 
     [Fact]

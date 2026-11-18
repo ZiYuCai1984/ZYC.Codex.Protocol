@@ -116,9 +116,10 @@ public class SchemaTypeResolver
             }
             else
             {
-                if (schema.Enumeration.Count > 0)
+                if (schema.Enumeration.Count > 0 && IntegerConstant(schema) == null)
                 {
-                    throw Analyzer.Document.Unsupported(schema, "Only string enums are supported.");
+                    throw Analyzer.Document.Unsupported(schema,
+                        "Only string enums and single-value integer enums are supported.");
                 }
 
                 var type = schema.Type & ~JsonObjectType.Null;
@@ -146,6 +147,17 @@ public class SchemaTypeResolver
         {
             Resolving.Remove(schema);
         }
+    }
+
+    // A single-value integer enum resolves to its integer primitive, like a single-value string enum resolves to
+    // string. Required object properties keep the value as a fixed constant.
+    internal string? IntegerConstant(JsonSchema schema)
+    {
+        return schema.Type == JsonObjectType.Integer && schema.Enumeration.Count == 1 &&
+               Analyzer.Document.Source(schema).Json is JObject raw &&
+               raw["enum"] is JArray { Count: 1 } values && values[0].Type == JTokenType.Integer
+            ? values[0].ToString(Newtonsoft.Json.Formatting.None)
+            : null;
     }
 
     private bool IsUnrestricted(JsonSchema schema)
@@ -186,7 +198,7 @@ public class SchemaTypeResolver
         var name = (defaultName, schema.Format) switch
         {
             (_, null or "") => defaultName,
-            ("long", "int32") => "int", ("long", "int64") => "long",
+            ("long", "int32") => "int", ("long", "int64") => "long", ("long", "uint8") => "byte",
             ("long", "uint16") => "ushort", ("long", "uint32") => "uint", ("long", "uint64" or "uint") => "ulong",
             ("double", "float") => "float", ("double", "double") => "double",
             ("string", "uuid") => "Guid", ("string", "date-time") => "DateTimeOffset",
