@@ -55,20 +55,20 @@ public static class CSharpTypeWriter
             foreach (var p in model.Properties)
             {
                 writer.Summary(p.Description);
-                if (p is { IsOverride: true, Constant: { } overridden, ConstantMemberName: { } member })
+                if (p is { IsOverride: true, Constant: not null, ConstantMemberName: { } member })
                 {
                     // An override cannot add the setter that the get-only base member lacks, so a private
                     // property carries the JSON value and keeps the deserialization check.
                     writer.Line("[JsonIgnore]");
-                    writer.Line($"public override string {p.CSharpName} => {CodeWriter.Literal(overridden)};");
+                    writer.Line($"public override {Type(p.Type)} {p.CSharpName} => {ConstantLiteral(p)};");
                     writer.Line();
                     writer.Line($"[JsonPropertyName({CodeWriter.Literal(p.JsonName)})]");
-                    ConstantProperty(writer, model, p, $"private string {member}", "set");
+                    ConstantProperty(writer, model, p, $"private {Type(p.Type)} {member}", "set");
                 }
                 else if (p.Constant != null)
                 {
                     writer.Line($"[JsonPropertyName({CodeWriter.Literal(p.JsonName)})]");
-                    ConstantProperty(writer, model, p, $"public string {p.CSharpName}", "private set");
+                    ConstantProperty(writer, model, p, $"public {Type(p.Type)} {p.CSharpName}", "private set");
                 }
                 else
                 {
@@ -101,10 +101,17 @@ public static class CSharpTypeWriter
         writer.Line("}");
     }
 
+    // String constants are quoted; integer constants keep their JSON number text as the C# literal.
+    private static string ConstantLiteral(PropertyModel p)
+    {
+        return p.Type is { Kind: TypeKind.Primitive, Name: "string" } ? CodeWriter.Literal(p.Constant!) : p.Constant!;
+    }
+
     private static void ConstantProperty(CodeWriter writer, ObjectTypeModel model, PropertyModel p,
         string declaration, string setter)
     {
         var constant = p.Constant!;
+        var literal = ConstantLiteral(p);
         writer.Line("[JsonInclude]");
         writer.Line("[JsonRequired]");
         writer.Line("[JsonIgnore(Condition = JsonIgnoreCondition.Never)]");
@@ -112,12 +119,12 @@ public static class CSharpTypeWriter
         writer.Line("{");
         using (writer.Indent())
         {
-            writer.Line($"get => {CodeWriter.Literal(constant)};");
+            writer.Line($"get => {literal};");
             writer.Line(setter);
             writer.Line("{");
             using (writer.Indent())
             {
-                writer.Line($"if (value != {CodeWriter.Literal(constant)})");
+                writer.Line($"if (value != {literal})");
                 writer.Line("{");
                 using (writer.Indent())
                 {
