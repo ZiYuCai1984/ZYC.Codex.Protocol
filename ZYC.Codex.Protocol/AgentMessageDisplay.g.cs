@@ -6,28 +6,10 @@ using System.Text.Json.Serialization;
 namespace ZYC.Codex.Protocol;
 
 /// <summary>
-///     A presentation instruction for Chat to apply to this answer when recovering history.
+///     How Chat should present a recovered answer.
 /// </summary>
-public class AgentMessageDisplay
+[JsonConverter(typeof(AgentMessageDisplayJsonConverter))]
+public abstract class AgentMessageDisplay
 {
-    /// <summary>
-    ///     Unknown actions must be left for the producing client to handle.
-    /// </summary>
-    [JsonPropertyName("action")]
-    [JsonRequired]
-    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public string Action { get; set; } = default!;
-
-    [JsonPropertyName("blockType")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public Optional<string?> BlockType { get; set; }
-
-    [JsonPropertyName("checkTrustedContacts")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public Optional<bool?> CheckTrustedContacts { get; set; }
-
-    [JsonPropertyName("cyberTrustedAccess")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public Optional<bool?> CyberTrustedAccess { get; set; }
-
+    private protected AgentMessageDisplay() { }
 }
