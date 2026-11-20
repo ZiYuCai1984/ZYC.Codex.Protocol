@@ -22,6 +22,13 @@ public class ListMcpServerStatusParams
     public Optional<McpServerStatusDetail?> Detail { get; set; }
 
     /// <summary>
+    ///     Select this environment's registration. Requires `serverName` and `threadId`. When omitted, a named request uses the same server as older clients.
+    /// </summary>
+    [JsonPropertyName("environmentId")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> EnvironmentId { get; set; }
+
+    /// <summary>
     ///     Optional page size; defaults to a server-defined value.
     /// </summary>
     [JsonPropertyName("limit")]

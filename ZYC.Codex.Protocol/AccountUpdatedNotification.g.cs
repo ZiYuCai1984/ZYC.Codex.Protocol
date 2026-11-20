@@ -15,4 +15,11 @@ public class AccountUpdatedNotification
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<PlanType?> PlanType { get; set; }
 
+    /// <summary>
+    ///     Set when initial routing discovery completes for the same authenticated owner.
+    /// </summary>
+    [JsonPropertyName("reason")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<AccountUpdateReason?> Reason { get; set; }
+
 }

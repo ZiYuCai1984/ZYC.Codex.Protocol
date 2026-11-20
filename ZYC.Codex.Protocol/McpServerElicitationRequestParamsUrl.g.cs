@@ -17,6 +17,13 @@ public class McpServerElicitationRequestParamsUrl : McpServerElicitationRequestP
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public string ElicitationId { get; set; } = default!;
 
+    /// <summary>
+    ///     Registration scope, not necessarily the server's execution environment.
+    /// </summary>
+    [JsonPropertyName("environmentId")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> EnvironmentId { get; set; }
+
     [JsonPropertyName("message")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]

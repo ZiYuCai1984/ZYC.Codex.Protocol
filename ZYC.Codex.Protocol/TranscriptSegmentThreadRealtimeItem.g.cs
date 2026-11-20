@@ -13,6 +13,13 @@ public class TranscriptSegmentThreadRealtimeItem : ThreadRealtimeItem
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public string Id { get; set; } = default!;
 
+    /// <summary>
+    ///     Canonical observation time in Unix milliseconds for eligible voice calls.
+    /// </summary>
+    [JsonPropertyName("observedAtMs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<long?> ObservedAtMs { get; set; }
+
     [JsonPropertyName("realtimeSessionId")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]

@@ -21,6 +21,13 @@ public class McpResourceReadParams
     public Optional<string?> ConnectorId { get; set; }
 
     /// <summary>
+    ///     Exact registration scope; omission preserves legacy name-only selection.
+    /// </summary>
+    [JsonPropertyName("environmentId")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> EnvironmentId { get; set; }
+
+    /// <summary>
     ///     Originating MCP tool call used to select the resource's app.
     /// </summary>
     [JsonPropertyName("originCallId")]

@@ -31,6 +31,13 @@ public class McpToolCallThreadItem : ThreadItem
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<long?> DurationMs { get; set; }
 
+    /// <summary>
+    ///     Registration scope, not necessarily the server's execution environment.
+    /// </summary>
+    [JsonPropertyName("environmentId")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> EnvironmentId { get; set; }
+
     [JsonPropertyName("error")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<McpToolCallError?> Error { get; set; }

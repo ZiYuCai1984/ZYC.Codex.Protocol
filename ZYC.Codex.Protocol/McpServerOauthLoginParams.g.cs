@@ -15,6 +15,13 @@ public class McpServerOauthLoginParams
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<McpServerOauthClientRegistration?> ClientRegistration { get; set; }
 
+    /// <summary>
+    ///     Exact registration scope; omission preserves legacy name-only selection.
+    /// </summary>
+    [JsonPropertyName("environmentId")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> EnvironmentId { get; set; }
+
     [JsonPropertyName("name")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]

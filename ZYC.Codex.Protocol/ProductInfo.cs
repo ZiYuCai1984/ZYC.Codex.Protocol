@@ -12,5 +12,5 @@ public static class ProductInfo
 
     public static string Version => $"1.0.1-{CodexVersion}";
 
-    public static string CodexVersion => "0.170.0";
+    public static string CodexVersion => "0.171.0";
 }

@@ -26,6 +26,8 @@ public class CodexErrorInfoJsonConverter : JsonConverter<CodexErrorInfo>
         }
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "badRequest")
             return new CodexErrorInfoBadRequest();
+        if (root.ValueKind == JsonValueKind.String && root.GetString() == "bioPolicy")
+            return new CodexErrorInfoBioPolicy();
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "contextWindowExceeded")
             return new CodexErrorInfoContextWindowExceeded();
         if (root.ValueKind == JsonValueKind.String && root.GetString() == "cyberPolicy")
@@ -120,6 +122,9 @@ public class CodexErrorInfoJsonConverter : JsonConverter<CodexErrorInfo>
                 break;
             case CodexErrorInfoBadRequest concrete:
                 writer.WriteStringValue("badRequest");
+                break;
+            case CodexErrorInfoBioPolicy concrete:
+                writer.WriteStringValue("bioPolicy");
                 break;
             case CodexErrorInfoContextWindowExceeded concrete:
                 writer.WriteStringValue("contextWindowExceeded");

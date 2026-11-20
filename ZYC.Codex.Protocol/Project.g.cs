@@ -28,11 +28,6 @@ public class Project
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public string Name { get; set; } = default!;
 
-    [JsonPropertyName("position")]
-    [JsonRequired]
-    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public long Position { get; set; } = default!;
-
     /// <summary>
     ///     Newest non-archived member thread's recency, in Unix seconds; null when none exist.
     /// </summary>

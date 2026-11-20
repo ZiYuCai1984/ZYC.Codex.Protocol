@@ -72,6 +72,7 @@ public class ClientRequestJsonConverter : JsonConverter<ClientRequest>
             "model/list" => root.Deserialize<ModelListRequest>(options) ?? throw new JsonException("Expected ModelListRequest."),
             "modelProvider/capabilities/read" => root.Deserialize<ModelProviderCapabilitiesReadRequest>(options) ?? throw new JsonException("Expected ModelProviderCapabilitiesReadRequest."),
             "modelProvider/config/write" => root.Deserialize<ModelProviderConfigWriteRequest>(options) ?? throw new JsonException("Expected ModelProviderConfigWriteRequest."),
+            "modelProvider/default/set" => root.Deserialize<ModelProviderDefaultSetRequest>(options) ?? throw new JsonException("Expected ModelProviderDefaultSetRequest."),
             "modelProvider/list" => root.Deserialize<ModelProviderListRequest>(options) ?? throw new JsonException("Expected ModelProviderListRequest."),
             "permissionProfile/list" => root.Deserialize<PermissionProfileListRequest>(options) ?? throw new JsonException("Expected PermissionProfileListRequest."),
             "plugin/install" => root.Deserialize<PluginInstallRequest>(options) ?? throw new JsonException("Expected PluginInstallRequest."),
@@ -297,6 +298,9 @@ public class ClientRequestJsonConverter : JsonConverter<ClientRequest>
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
             case ModelProviderConfigWriteRequest concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
+            case ModelProviderDefaultSetRequest concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
             case ModelProviderListRequest concrete:

@@ -18,9 +18,12 @@ public class ThreadRealtimeItemJsonConverter : JsonConverter<ThreadRealtimeItem>
         return discriminator.GetString() switch
         {
             "bemItemPromoted" => root.Deserialize<BemItemPromotedThreadRealtimeItem>(options) ?? throw new JsonException("Expected BemItemPromotedThreadRealtimeItem."),
+            "frame" => root.Deserialize<FrameThreadRealtimeItem>(options) ?? throw new JsonException("Expected FrameThreadRealtimeItem."),
             "realtimeSessionClosed" => root.Deserialize<RealtimeSessionClosedThreadRealtimeItem>(options) ?? throw new JsonException("Expected RealtimeSessionClosedThreadRealtimeItem."),
             "realtimeSessionStarted" => root.Deserialize<RealtimeSessionStartedThreadRealtimeItem>(options) ?? throw new JsonException("Expected RealtimeSessionStartedThreadRealtimeItem."),
+            "sessionEndInputSaved" => root.Deserialize<SessionEndInputSavedThreadRealtimeItem>(options) ?? throw new JsonException("Expected SessionEndInputSavedThreadRealtimeItem."),
             "transcriptSegment" => root.Deserialize<TranscriptSegmentThreadRealtimeItem>(options) ?? throw new JsonException("Expected TranscriptSegmentThreadRealtimeItem."),
+            "turnInputAccepted" => root.Deserialize<TurnInputAcceptedThreadRealtimeItem>(options) ?? throw new JsonException("Expected TurnInputAcceptedThreadRealtimeItem."),
             _ => throw new JsonException("Unknown ThreadRealtimeItem type \u0027" + discriminator.GetString() + "\u0027.")
         };
     }
@@ -32,13 +35,22 @@ public class ThreadRealtimeItemJsonConverter : JsonConverter<ThreadRealtimeItem>
             case BemItemPromotedThreadRealtimeItem concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
+            case FrameThreadRealtimeItem concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
             case RealtimeSessionClosedThreadRealtimeItem concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
             case RealtimeSessionStartedThreadRealtimeItem concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
+            case SessionEndInputSavedThreadRealtimeItem concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
             case TranscriptSegmentThreadRealtimeItem concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
+            case TurnInputAcceptedThreadRealtimeItem concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
             default: throw new JsonException("Unknown runtime type for ThreadRealtimeItem.");

@@ -44,6 +44,13 @@ public class ThreadListParams
     public Optional<List<string>?> ExcludedThreadIds { get; set; }
 
     /// <summary>
+    ///     Restrict results to up to 100 thread IDs before pagination. Omit or send null for unrestricted results. An empty list matches nothing. Exclusions still apply. Repeat the same IDs on each page. The local store uses indexed metadata for this filter.
+    /// </summary>
+    [JsonPropertyName("includedThreadIds")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<List<string>?> IncludedThreadIds { get; set; }
+
+    /// <summary>
     ///     Optional page size; defaults to a reasonable server-side value.
     /// </summary>
     [JsonPropertyName("limit")]
@@ -100,7 +107,7 @@ public class ThreadListParams
     public Optional<List<ThreadSourceKind>?> SourceKinds { get; set; }
 
     /// <summary>
-    ///     If true, return from the state DB without scanning JSONL rollouts to repair thread metadata. Omitted or false preserves scan-and-repair behavior.
+    ///     If true, the local store returns indexed metadata without scanning JSONL rollouts for repairs. Requests with `includedThreadIds` always use indexed metadata.
     /// </summary>
     [JsonPropertyName("useStateDbOnly")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

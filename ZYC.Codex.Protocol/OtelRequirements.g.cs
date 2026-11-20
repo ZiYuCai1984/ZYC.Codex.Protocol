@@ -16,6 +16,14 @@ public class OtelRequirements
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<OtelExporter?> Exporter { get; set; }
 
+    [JsonPropertyName("headers_helper")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> HeadersHelper { get; set; }
+
+    [JsonPropertyName("headers_helper_refresh_interval_ms")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<ulong?> HeadersHelperRefreshIntervalMs { get; set; }
+
     [JsonPropertyName("log_agent_responses")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<bool?> LogAgentResponses { get; set; }

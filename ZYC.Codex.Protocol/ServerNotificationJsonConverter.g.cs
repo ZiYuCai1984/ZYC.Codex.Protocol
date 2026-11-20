@@ -89,6 +89,7 @@ public class ServerNotificationJsonConverter : JsonConverter<ServerNotification>
             "thread/realtime/transcript/delta" => root.Deserialize<ThreadRealtimeTranscriptDeltaNotification2>(options) ?? throw new JsonException("Expected ThreadRealtimeTranscriptDeltaNotification2."),
             "thread/realtime/transcript/done" => root.Deserialize<ThreadRealtimeTranscriptDoneNotification2>(options) ?? throw new JsonException("Expected ThreadRealtimeTranscriptDoneNotification2."),
             "thread/reverted" => root.Deserialize<ThreadRevertedNotification2>(options) ?? throw new JsonException("Expected ThreadRevertedNotification2."),
+            "thread/search/partial" => root.Deserialize<ThreadSearchPartialNotification2>(options) ?? throw new JsonException("Expected ThreadSearchPartialNotification2."),
             "thread/section/changed" => root.Deserialize<ThreadSectionChangedNotification2>(options) ?? throw new JsonException("Expected ThreadSectionChangedNotification2."),
             "thread/settings/updated" => root.Deserialize<ThreadSettingsUpdatedNotification2>(options) ?? throw new JsonException("Expected ThreadSettingsUpdatedNotification2."),
             "thread/started" => root.Deserialize<ThreadStartedNotification2>(options) ?? throw new JsonException("Expected ThreadStartedNotification2."),
@@ -325,6 +326,9 @@ public class ServerNotificationJsonConverter : JsonConverter<ServerNotification>
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
             case ThreadRevertedNotification2 concrete:
+                JsonSerializer.Serialize(writer, concrete, options);
+                break;
+            case ThreadSearchPartialNotification2 concrete:
                 JsonSerializer.Serialize(writer, concrete, options);
                 break;
             case ThreadSectionChangedNotification2 concrete:

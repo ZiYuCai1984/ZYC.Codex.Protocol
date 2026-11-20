@@ -16,6 +16,13 @@ public class McpServerToolCallParams
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<JsonElement> Arguments { get; set; }
 
+    /// <summary>
+    ///     Exact registration scope; omission preserves legacy name-only selection.
+    /// </summary>
+    [JsonPropertyName("environmentId")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> EnvironmentId { get; set; }
+
     [JsonPropertyName("server")]
     [JsonRequired]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]

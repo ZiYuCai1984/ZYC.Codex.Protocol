@@ -7,6 +7,13 @@ namespace ZYC.Codex.Protocol;
 
 public class McpServerStatusUpdatedNotification
 {
+    /// <summary>
+    ///     Registration scope, not necessarily the server's execution environment.
+    /// </summary>
+    [JsonPropertyName("environmentId")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Optional<string?> EnvironmentId { get; set; }
+
     [JsonPropertyName("error")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Optional<string?> Error { get; set; }
